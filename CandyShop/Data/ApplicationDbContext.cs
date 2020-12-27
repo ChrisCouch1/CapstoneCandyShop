@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CandyShop.Models;
 
 namespace CandyShop.Data
 {
@@ -35,5 +36,8 @@ namespace CandyShop.Data
             }
             );
         }
+        public DbSet<CandyShop.Models.Employee> Employee { get; set; }
+        public DbSet<CandyShop.Models.Manager> Manager { get; set; }
+        public DbSet<CandyShop.Models.Admin> Admin { get; set; }
     }
 }

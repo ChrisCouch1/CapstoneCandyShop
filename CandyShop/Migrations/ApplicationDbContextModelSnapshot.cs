@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CandyShop.Data.Migrations
+namespace CandyShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -18,6 +18,102 @@ namespace CandyShop.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CandyShop.Models.Admin", b =>
+                {
+                    b.Property<int>("userId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("userId");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Admin");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Employee", b =>
+                {
+                    b.Property<int>("userId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("clockIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("clockOut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("phoneNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("userId");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Employee");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Manager", b =>
+                {
+                    b.Property<int>("userId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("clockIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("clockOut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("phoneNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("userId");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Manager");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -48,22 +144,22 @@ namespace CandyShop.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "54c4ef3f-8b7c-4686-aa68-2e13a8baf7e1",
-                            ConcurrencyStamp = "5aebab2d-1b9f-4b1f-b4cd-4e52f25530fc",
+                            Id = "a6d98d9b-0725-44fa-a293-aba485675674",
+                            ConcurrencyStamp = "7a4ecc65-0b5f-473c-ae73-805c8f992411",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "021f651d-328a-41c6-8f62-8af1516d2f92",
-                            ConcurrencyStamp = "f1805171-d662-49fd-b25b-c7ce2dd03882",
+                            Id = "8c39751f-3351-4fe3-94e9-5fe310486351",
+                            ConcurrencyStamp = "ffeb04e3-34bc-4783-b2de-56b393d1ae5f",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "07f66859-b684-47cd-b721-bd7637ef14a9",
-                            ConcurrencyStamp = "650b234c-a2d6-4d8c-b22b-7d33d4fb1163",
+                            Id = "6f4f3fd1-61f6-49c4-afba-f677d1b75305",
+                            ConcurrencyStamp = "bc1008dd-f6c5-441f-82e8-75bb0dd8b9da",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });
@@ -236,6 +332,27 @@ namespace CandyShop.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Admin", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Employee", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Manager", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
