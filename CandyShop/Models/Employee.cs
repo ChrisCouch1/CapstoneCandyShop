@@ -20,8 +20,8 @@ namespace CandyShop.Models
         public string name { get; set; }
         public string address { get; set; }
         public int phoneNumber { get; set; }
-        public DateTime dateStart { get; set; }
-        public DateTime dateEnd { get; set; }
+        public DateTime breakStart { get; set; }
+        public DateTime breakEnd { get; set; }
         public DateTime clockIn { get; set; }
         public DateTime clockOut { get; set; }
     }
