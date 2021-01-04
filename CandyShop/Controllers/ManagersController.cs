@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CandyShop.Data;
 using CandyShop.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -33,9 +36,11 @@ namespace CandyShop.Controllers
             {
                 return NotFound();
             }
-
-            var manager = await _context.Manager
-                .Include(m => m.IdentityUser)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var manager = _context.Manager.Where(c => c.IdentityUserId ==
+            userId).SingleOrDefault();
+            manager = await _context.Manager
+                .Include(c => c.IdentityUser)
                 .FirstOrDefaultAsync(m => m.userId == id);
             if (manager == null)
             {
@@ -57,10 +62,12 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("userId,IdentityUserId,name,address,phoneNumber,dateStart,dateEnd,clockIn,clockOut")] Manager manager)
+        public async Task<IActionResult> Create(Manager manager)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                manager.IdentityUserId = userId;
                 _context.Add(manager);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

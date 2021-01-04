@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CandyShop.Data;
 using CandyShop.Models;
+using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
@@ -22,8 +23,15 @@ namespace CandyShop.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Employee.Include(e => e.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(c => c.IdentityUserId ==
+            userId).SingleOrDefault();
+            if (employee == null)
+            {
+                return View(nameof(Create));
+            }
+
+            return View(employee);
         }
 
         // GET: Employees/Details/5
@@ -33,9 +41,11 @@ namespace CandyShop.Controllers
             {
                 return NotFound();
             }
-
-            var employee = await _context.Employee
-                .Include(e => e.IdentityUser)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(c => c.IdentityUserId ==
+            userId).SingleOrDefault();
+            employee = await _context.Employee
+                .Include(c => c.IdentityUser)
                 .FirstOrDefaultAsync(m => m.userId == id);
             if (employee == null)
             {
@@ -45,8 +55,8 @@ namespace CandyShop.Controllers
             return View(employee);
         }
 
-        // GET: Employees/Create
-        public IActionResult Create()
+            // GET: Employees/Create
+            public IActionResult Create()
         {
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
@@ -57,10 +67,13 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("userId,IdentityUserId,name,address,phoneNumber,dateStart,dateEnd,clockIn,clockOut")] Employee employee)
+        public async Task<IActionResult> Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employee.IdentityUserId = userId;
+
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

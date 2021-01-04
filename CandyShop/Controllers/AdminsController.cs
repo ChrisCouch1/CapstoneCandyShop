@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CandyShop.Data;
 using CandyShop.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,8 +25,15 @@ namespace CandyShop.Controllers
         // GET: Admins
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Admin.Include(a => a.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admin.Where(c => c.IdentityUserId ==
+            userId).SingleOrDefault();
+            if (admin == null)
+            {
+                return View(nameof(Create));
+            }
+
+            return View(admin);
         }
 
         // GET: Admins/Details/5
@@ -33,16 +43,18 @@ namespace CandyShop.Controllers
             {
                 return NotFound();
             }
-
-            var admin = await _context.Admin
-                .Include(a => a.IdentityUser)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admin.Where(c => c.IdentityUserId ==
+            userId).SingleOrDefault();
+            admin = await _context.Admin
+                .Include(c => c.IdentityUser)
                 .FirstOrDefaultAsync(m => m.userId == id);
             if (admin == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(admin); ;
         }
 
         // GET: Admins/Create
@@ -57,10 +69,13 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("userId,IdentityUserId,name")] Admin admin)
+        public async Task<IActionResult> Create(Admin admin)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                admin.IdentityUserId = userId;
+
                 _context.Add(admin);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +106,7 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("userId,IdentityUserId,name")] Admin admin)
+        public async Task<IActionResult> Edit(int id, Admin admin)
         {
             if (id != admin.userId)
             {
