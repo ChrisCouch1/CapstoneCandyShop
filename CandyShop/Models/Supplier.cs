@@ -16,7 +16,7 @@ namespace CandyShop.Models
         public int productId { get; set; }
         public string name { get; set; }
         public string address { get; set; }
-        public int phoneNumber { get; set; }
+        public string phoneNumber { get; set; }
         public string email { get; set; }
         public string url { get; set; }
         public string details { get; set; }
