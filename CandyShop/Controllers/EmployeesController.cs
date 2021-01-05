@@ -33,7 +33,35 @@ namespace CandyShop.Controllers
 
             return View(employee);
         }
+        public ActionResult TimePunch(int id)
+        {
+            var employee = _context.Employee.Where(e => e.userId == id).FirstOrDefault();
+            return View(employee);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TimePunch(Employee employee)
+        {
+            var currentEmployee = _context.Employee.Where(e => e.userId == employee.userId).FirstOrDefault();
+            if (currentEmployee.clockIn == null)
+            {
+                currentEmployee.clockIn = DateTime.Now;
+            }
+            else if(currentEmployee.clockIn != null && currentEmployee.breakStart == null)
+            {
+                currentEmployee.breakStart = DateTime.Now;
+            }
+            else if(currentEmployee.breakStart != null && currentEmployee.breakEnd == null)
+            {
+                currentEmployee.breakEnd = DateTime.Now;
+            }
+            else if(currentEmployee.breakEnd != null && currentEmployee.clockOut == null)
+            {
+                currentEmployee.clockOut = DateTime.Now;
+            }
+            return View(nameof(Index));
+        }
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
