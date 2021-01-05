@@ -23,7 +23,7 @@ namespace CandyShop.Controllers
         }
 
         // GET: Admins
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var admin = _context.Admin.Where(c => c.IdentityUserId ==

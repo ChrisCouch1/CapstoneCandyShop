@@ -1,12 +1,12 @@
-﻿@model CandyShop.Models.Manager
+﻿@model CandyShop.Models.Employee
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Time Punch</h1>
 
-<h4>Manager</h4>
+<h4>Select times to edit</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,19 +14,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="userId" />
             <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
+                <label asp-for="clockIn" class="control-label"></label>
+                <input asp-for="clockIn" class="form-control" />
+                <span asp-validation-for="clockIn" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
+                <label asp-for="breakStart" class="control-label"></label>
+                <input asp-for="breakStart" class="form-control" />
+                <span asp-validation-for="breakStart" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="phoneNumber" class="control-label"></label>
-                <input asp-for="phoneNumber" class="form-control" />
-                <span asp-validation-for="phoneNumber" class="text-danger"></span>
+                <label asp-for="breakEnd" class="control-label"></label>
+                <input asp-for="breakEnd" class="form-control" />
+                <span asp-validation-for="breakEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="clockOut" class="control-label"></label>
+                <input asp-for="clockOut" class="form-control" />
+                <span asp-validation-for="clockOut" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

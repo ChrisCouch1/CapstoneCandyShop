@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+   // [Authorize(Roles = "Admin, Manager")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,24 +30,11 @@ namespace CandyShop.Controllers
         }
 
         // GET: Managers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public ActionResult Details(DateTime dateTime)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var manager = _context.Manager.Where(c => c.IdentityUserId ==
-            userId).SingleOrDefault();
-            manager = await _context.Manager
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.userId == id);
-            if (manager == null)
-            {
-                return NotFound();
-            }
-
-            return View(manager);
+            var employeeList = _context.Employee.Where(e => e.clockIn.Day == dateTime.Day).ToList();
+            
+            return View(employeeList);
         }
 
         // GET: Managers/Create
@@ -84,13 +71,13 @@ namespace CandyShop.Controllers
                 return NotFound();
             }
 
-            var manager = await _context.Manager.FindAsync(id);
-            if (manager == null)
+            var timeEdit = await _context.Employee.FindAsync(id);
+            if (timeEdit == null)
             {
                 return NotFound();
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", manager.IdentityUserId);
-            return View(manager);
+            
+            return View(timeEdit);
         }
 
         // POST: Managers/Edit/5
@@ -98,9 +85,9 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("userId,IdentityUserId,name,address,phoneNumber,dateStart,dateEnd,clockIn,clockOut")] Manager manager)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
-            if (id != manager.userId)
+            if (id != employee.userId)
             {
                 return NotFound();
             }
@@ -109,24 +96,17 @@ namespace CandyShop.Controllers
             {
                 try
                 {
-                    _context.Update(manager);
+                    _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ManagerExists(manager.userId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;                    
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", manager.IdentityUserId);
-            return View(manager);
+            
+            return View(employee);
         }
 
         // GET: Managers/Delete/5
