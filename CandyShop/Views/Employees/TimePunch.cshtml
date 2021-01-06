@@ -1,7 +1,46 @@
-﻿
+﻿@model CandyShop.Models.Employee
+
 @{
     ViewData["Title"] = "TimePunch";
 }
 
 <h1>TimePunch</h1>
+
+<h4>Employee</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="TimePunch">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="userId" />
+            <div class="form-group">
+                <label asp-for="breakStart" class="control-label"></label>
+                <input asp-for="breakStart" class="form-control" />
+                <span asp-validation-for="breakStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="breakEnd" class="control-label"></label>
+                <input asp-for="breakEnd" class="form-control" />
+                <span asp-validation-for="breakEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="clockIn" class="control-label"></label>
+                <input asp-for="clockIn" class="form-control" />
+                <span asp-validation-for="clockIn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="clockOut" class="control-label"></label>
+                <input asp-for="clockOut" class="form-control" />
+                <span asp-validation-for="clockOut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 

@@ -23,15 +23,10 @@ namespace CandyShop.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var employee = _context.Employee.Where(c => c.IdentityUserId ==
-            userId).SingleOrDefault();
-            if (employee == null)
-            {
-                return View(nameof(Create));
-            }
+            var productList = _context.Product.ToList();
+           
 
-            return View(employee);
+            return View(productList);
         }
         public ActionResult TimePunch(int id)
         {
@@ -83,8 +78,26 @@ namespace CandyShop.Controllers
             return View(employee);
         }
 
-            // GET: Employees/Create
-            public IActionResult Create()
+        // GET: Employees/ProductDetails/5
+        public ActionResult ProductDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
+            var product = _context.Product.Where(p => p.productId ==
+            id).SingleOrDefault();
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        // GET: Employees/Create
+        public IActionResult Create()
         {
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
