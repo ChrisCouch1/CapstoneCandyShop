@@ -11,12 +11,11 @@ namespace CandyShop.Models
     {
         [Key]
         public int productId { get; set; }
-        
-        [ForeignKey("Category")]
-        public int categoryId { get; set; }
-        public string name { get; set; }
+        public string category { get; set; }
+        public string productName { get; set; }
         public string description { get; set; }
         public int QTY { get; set; }
-        public int price { get; set; }
+        public double price { get; set; }
+        public string supplierDetails { get; set; }
     }
 }

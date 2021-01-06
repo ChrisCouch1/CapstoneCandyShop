@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CandyShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210104163053_new")]
-    partial class @new
+    [Migration("20210106145022_newOneInit")]
+    partial class newOneInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -69,8 +69,8 @@ namespace CandyShop.Migrations
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("phoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("phoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("userId");
 
@@ -107,14 +107,44 @@ namespace CandyShop.Migrations
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("phoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("phoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("userId");
 
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Manager");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Product", b =>
+                {
+                    b.Property<int>("productId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("QTY")
+                        .HasColumnType("int");
+
+                    b.Property<string>("category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("productName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("supplierDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("productId");
+
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -146,22 +176,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e1852141-b5de-4aea-84da-9701a5d0a0d4",
-                            ConcurrencyStamp = "09fee960-da29-4710-8f04-607fb7365af0",
+                            Id = "b4e33298-7fda-47bf-a7a4-35e2c1eb6222",
+                            ConcurrencyStamp = "af0959b4-20ff-40aa-90ce-62ac4e79aaa9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "23c825f4-d99d-4592-a0e7-cb8173b9f0a8",
-                            ConcurrencyStamp = "c9bf9179-4bba-48b3-8c12-3110ca709b57",
+                            Id = "86a75b18-1ae4-40b9-9fec-fac3567d3dd0",
+                            ConcurrencyStamp = "148f3365-f1b9-4de5-aada-8ee10fc19cd4",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "f38faee7-3df3-4475-8d52-aacb062bc2da",
-                            ConcurrencyStamp = "eee173e8-f8c4-4469-bb0d-2bcb466ac8ba",
+                            Id = "0df41a86-f5d2-4d4e-bde6-772a93b7cce2",
+                            ConcurrencyStamp = "e587a3e7-5d9c-4e40-9f25-c8582f28bc7c",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });

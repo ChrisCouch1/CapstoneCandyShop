@@ -115,6 +115,36 @@ namespace CandyShop.Migrations
                     b.ToTable("Manager");
                 });
 
+            modelBuilder.Entity("CandyShop.Models.Product", b =>
+                {
+                    b.Property<int>("productId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("QTY")
+                        .HasColumnType("int");
+
+                    b.Property<string>("category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("productName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("supplierDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("productId");
+
+                    b.ToTable("Product");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -144,22 +174,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e4e6291d-e534-44d2-833c-c6a5150cdcbb",
-                            ConcurrencyStamp = "571c9837-e6dd-4f9d-90cd-0aa22723d27a",
+                            Id = "b4e33298-7fda-47bf-a7a4-35e2c1eb6222",
+                            ConcurrencyStamp = "af0959b4-20ff-40aa-90ce-62ac4e79aaa9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "40bd285d-a957-4519-bc93-90c8be3d6e8c",
-                            ConcurrencyStamp = "4b354e11-5bc9-4307-84c1-738b4f8bb605",
+                            Id = "86a75b18-1ae4-40b9-9fec-fac3567d3dd0",
+                            ConcurrencyStamp = "148f3365-f1b9-4de5-aada-8ee10fc19cd4",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "89d8d157-4e26-4c41-926d-a12fe6fd339b",
-                            ConcurrencyStamp = "92fc717e-b79c-4a89-8c2d-795dbaf022af",
+                            Id = "0df41a86-f5d2-4d4e-bde6-772a93b7cce2",
+                            ConcurrencyStamp = "e587a3e7-5d9c-4e40-9f25-c8582f28bc7c",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });

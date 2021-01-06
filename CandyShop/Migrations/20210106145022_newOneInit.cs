@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CandyShop.Migrations
 {
-    public partial class init : Migration
+    public partial class newOneInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,24 @@ namespace CandyShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    productId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    category = table.Column<string>(nullable: true),
+                    productName = table.Column<string>(nullable: true),
+                    description = table.Column<string>(nullable: true),
+                    QTY = table.Column<int>(nullable: false),
+                    price = table.Column<double>(nullable: false),
+                    supplierDetails = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.productId);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,9 +199,9 @@ namespace CandyShop.Migrations
                     IdentityUserId = table.Column<string>(nullable: true),
                     name = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
-                    phoneNumber = table.Column<int>(nullable: false),
-                    dateStart = table.Column<DateTime>(nullable: false),
-                    dateEnd = table.Column<DateTime>(nullable: false),
+                    phoneNumber = table.Column<string>(nullable: true),
+                    breakStart = table.Column<DateTime>(nullable: false),
+                    breakEnd = table.Column<DateTime>(nullable: false),
                     clockIn = table.Column<DateTime>(nullable: false),
                     clockOut = table.Column<DateTime>(nullable: false)
                 },
@@ -207,9 +225,9 @@ namespace CandyShop.Migrations
                     IdentityUserId = table.Column<string>(nullable: true),
                     name = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
-                    phoneNumber = table.Column<int>(nullable: false),
-                    dateStart = table.Column<DateTime>(nullable: false),
-                    dateEnd = table.Column<DateTime>(nullable: false),
+                    phoneNumber = table.Column<string>(nullable: true),
+                    breakStart = table.Column<DateTime>(nullable: false),
+                    breakEnd = table.Column<DateTime>(nullable: false),
                     clockIn = table.Column<DateTime>(nullable: false),
                     clockOut = table.Column<DateTime>(nullable: false)
                 },
@@ -227,17 +245,17 @@ namespace CandyShop.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a6d98d9b-0725-44fa-a293-aba485675674", "7a4ecc65-0b5f-473c-ae73-805c8f992411", "Admin", "ADMIN" });
+                values: new object[] { "b4e33298-7fda-47bf-a7a4-35e2c1eb6222", "af0959b4-20ff-40aa-90ce-62ac4e79aaa9", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "8c39751f-3351-4fe3-94e9-5fe310486351", "ffeb04e3-34bc-4783-b2de-56b393d1ae5f", "Manager", "MGR" });
+                values: new object[] { "86a75b18-1ae4-40b9-9fec-fac3567d3dd0", "148f3365-f1b9-4de5-aada-8ee10fc19cd4", "Manager", "MGR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6f4f3fd1-61f6-49c4-afba-f677d1b75305", "bc1008dd-f6c5-441f-82e8-75bb0dd8b9da", "Employee", "EMP" });
+                values: new object[] { "0df41a86-f5d2-4d4e-bde6-772a93b7cce2", "e587a3e7-5d9c-4e40-9f25-c8582f28bc7c", "Employee", "EMP" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_IdentityUserId",
@@ -319,6 +337,9 @@ namespace CandyShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "Manager");
+
+            migrationBuilder.DropTable(
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
