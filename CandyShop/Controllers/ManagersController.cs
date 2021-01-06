@@ -143,5 +143,106 @@ namespace CandyShop.Controllers
         {
             return _context.Manager.Any(e => e.userId == id);
         }
+
+        // GET: Managers/EditProduct/5
+        public async Task<IActionResult> EditProduct(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productEdit = await _context.Product.FindAsync(id);
+            if (productEdit == null)
+            {
+                return NotFound();
+            }
+
+            return View(productEdit);
+        }
+
+        // POST: Managers/EditProduct/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProduct(int id, Product product)
+        {
+            if (id != product.productId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(EditProduct));
+            }
+
+            return View(product);
+        }
+
+        // GET: Managers/CreateProduct
+        public IActionResult CreateProduct()
+        {
+            ViewData["CreateProduct"] = new SelectList(_context.Product, "Id", "Id");
+            return View();
+        }
+
+        // POST: Managers/CreateProduct
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProduct(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(CreateProduct));
+            }
+            ViewData["CreateProduct"] = new SelectList(_context.Product, "Id", "Id", product.productId);
+            return View(product);
+        }
+
+        // GET: Managers/DeleteProduct/5
+        public async Task<IActionResult> DeleteProduct(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Product
+                .Include(p => p.productId)
+                .FirstOrDefaultAsync(p => p.productId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        // POST: Managers/DeleteProduct/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProductConfirmed(int id)
+        {
+            var product = await _context.Product.FindAsync(id);
+            _context.Product.Remove(product);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(CreateProduct));
+        }
     }
+
 }
