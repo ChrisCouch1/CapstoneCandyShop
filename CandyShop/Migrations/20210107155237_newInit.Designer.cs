@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CandyShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210106145022_newOneInit")]
-    partial class newOneInit
+    [Migration("20210107155237_newInit")]
+    partial class newInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,22 +176,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b4e33298-7fda-47bf-a7a4-35e2c1eb6222",
-                            ConcurrencyStamp = "af0959b4-20ff-40aa-90ce-62ac4e79aaa9",
+                            Id = "3e1e85e9-e628-44a3-a9bd-844041e33390",
+                            ConcurrencyStamp = "7df04a4d-5014-4d3d-bfcb-2781889dfe7d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "86a75b18-1ae4-40b9-9fec-fac3567d3dd0",
-                            ConcurrencyStamp = "148f3365-f1b9-4de5-aada-8ee10fc19cd4",
+                            Id = "c32451d5-b7a3-4a55-99af-9c2b9f3dccb8",
+                            ConcurrencyStamp = "9ee456a8-bdd2-42dc-98c1-cadeed5ecd47",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "0df41a86-f5d2-4d4e-bde6-772a93b7cce2",
-                            ConcurrencyStamp = "e587a3e7-5d9c-4e40-9f25-c8582f28bc7c",
+                            Id = "c64ca110-1c41-41f3-ab11-e0d393ec3bf4",
+                            ConcurrencyStamp = "955e3c7f-2889-4f24-af04-5fe7deb8615e",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });
