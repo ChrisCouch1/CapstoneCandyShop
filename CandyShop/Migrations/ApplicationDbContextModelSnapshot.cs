@@ -174,22 +174,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3e1e85e9-e628-44a3-a9bd-844041e33390",
-                            ConcurrencyStamp = "7df04a4d-5014-4d3d-bfcb-2781889dfe7d",
+                            Id = "f26b0c96-619b-4c2d-ab72-22906e816316",
+                            ConcurrencyStamp = "896b439b-4c42-45a8-8605-52466880727b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c32451d5-b7a3-4a55-99af-9c2b9f3dccb8",
-                            ConcurrencyStamp = "9ee456a8-bdd2-42dc-98c1-cadeed5ecd47",
+                            Id = "4990a706-c476-443f-be06-32495f55df45",
+                            ConcurrencyStamp = "f59ad8ad-1618-4e3e-837f-24be5ecea358",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "c64ca110-1c41-41f3-ab11-e0d393ec3bf4",
-                            ConcurrencyStamp = "955e3c7f-2889-4f24-af04-5fe7deb8615e",
+                            Id = "1a3db251-37cc-4302-b59f-a3e90c2e0fe5",
+                            ConcurrencyStamp = "87c24f8b-6ebf-44ab-a44d-c9c4670ad636",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });

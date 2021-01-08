@@ -10,13 +10,13 @@ namespace CandyShop.Models
     public class Transaction
     {
         [Key]
-        public int transactionId { get; set; }
+        public DateTime transactionId { get; set; }
 
         [ForeignKey("User")]
         public int userId { get; set; }
 
         public List <Product> products { get; set; } 
-        public int totalCost { get; set; }
+        public double totalCost { get; set; }
 
     }
 }

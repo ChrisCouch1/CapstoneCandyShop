@@ -206,9 +206,31 @@ namespace CandyShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public void AddToCart(int userid, int productid)
+        {
+            var employee = _context.Employee.Where(e => e.userId == userid).SingleOrDefault();
+            var product = _context.Product.Where(p => p.productId == productid).SingleOrDefault();
+            employee.cart.Add(product);
+            
+        }
+
+        public Transaction PurchaseCart(int id)
+        {
+            var employee = _context.Employee.Where(e => e.userId == id).SingleOrDefault();
+            Transaction transaction = new Transaction();
+            transaction.products = employee.cart;
+             
+            foreach(var product in employee.cart)
+            {
+                transaction.totalCost += product.price;
+            }
+            return (transaction);
+        }
+
         private bool EmployeeExists(int id)
         {
             return _context.Employee.Any(e => e.userId == id);
+            
         }
     }
 }

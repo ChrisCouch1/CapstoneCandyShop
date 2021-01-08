@@ -24,5 +24,7 @@ namespace CandyShop.Models
         public DateTime breakEnd { get; set; }
         public DateTime clockIn { get; set; }
         public DateTime clockOut { get; set; }
+        [NotMapped]
+        public List<Product> cart { get; set; }
     }
 }

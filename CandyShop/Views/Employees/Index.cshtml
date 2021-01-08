@@ -4,12 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Welcome</h1>
+<h1>Welcome to the Candy Shop</h1>
 
-<p>
+
     <span>@DateTime.Now</span>
-    <span><button type="submit" asp-action="TimePunch" asp-action-id="Model.userId">Clock In/Out?</button></span>
-</p>
+    <form><button type="button" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="Model.userId">Clock In/Out?</button></form>
 <table class="table">
     <thead>
         <tr>
@@ -25,6 +24,7 @@
             <th>
                 Price
             </th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -46,6 +46,9 @@
                 </td>
                 <td>
                     <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
+                </td>
+                <td><a asp-action="AddToCart" asp-route-id="@product.productId">
+                    <span class="btn btn-info glyphicon glyphicon-shopping-cart"></span>Add to Cart</a>
                 </td>
             </tr>
         }
