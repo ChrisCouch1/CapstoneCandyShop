@@ -40,5 +40,6 @@ namespace CandyShop.Data
         public DbSet<CandyShop.Models.Manager> Manager { get; set; }
         public DbSet<CandyShop.Models.Admin> Admin { get; set; }
         public DbSet<CandyShop.Models.Product> Product { get; set; }
+        public DbSet<CandyShop.Models.Transaction> Transaction { get; set; }
     }
 }

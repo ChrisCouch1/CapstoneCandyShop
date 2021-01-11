@@ -9,7 +9,7 @@
 
     <span>@DateTime.Now</span>
     <form><button type="button" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="Model.userId">Clock In/Out</button></form>
-<div style="float:right"><span><button onclick="location.href='@Url.Action("edit", "employees")'" >View Cart</button></span></div>
+<div style="float:right"><span><button onclick="location.href='@Url.Action("cartlist", "employees")'" >View Cart</button></span></div>
 <table class="table">
     <thead>
         <tr>
@@ -48,8 +48,8 @@
                 <td>
                     <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
                 </td>
-                <td><a formaction=@Url.Action("AddToCart") asp-route-id="@product.productId">
-                    <span class="btn btn-info glyphicon glyphicon-shopping-cart"></span>Add to Cart</a>
+                <td>
+                    <button><a asp-action="AddToCart" id="@product.productId" asp-route-id="@product.productId">Add to Cart</a></button>
                 </td>
             </tr>
         }

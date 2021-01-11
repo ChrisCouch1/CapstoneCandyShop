@@ -29,7 +29,7 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            var productList = _context.Product.ToList();
+            List<Product> productList = _context.Product.ToList();
            
 
             return View(productList);
@@ -223,19 +223,49 @@ namespace CandyShop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        public void AddToCart(int productid)
+        public ActionResult CartList()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var product = _context.Product.Where(p => p.productId == productid).SingleOrDefault();
-            employee.cart.Add(product);
-            
+            var cartList = employee.cart.ToList();
+            return View(nameof(CartList));
+
+        }
+        
+        public ActionResult AddToCart(int? id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            Product product = _context.Product.Where(p => p.productId == id).SingleOrDefault();
+            if (employee.cart == null)
+            {
+                employee.cart = new List<Product>();
+                employee.cart.Add(product);
+            }
+            else
+            {
+                employee.cart.Add(product);
+            }
+            _context.Update(employee);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
-        public Transaction PurchaseCart(int id)
+        public ActionResult RemoveFromCart(int productId)
         {
-            var employee = _context.Employee.Where(e => e.userId == id).SingleOrDefault();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            var product = _context.Product.Where(p => p.productId == productId).SingleOrDefault();
+            employee.cart.Remove(product);
+            
+            _context.SaveChanges();
+            return View(nameof(CartList));
+        }
+
+        public ActionResult PurchaseCart(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             Transaction transaction = new Transaction();
             transaction.products = employee.cart;
              
@@ -243,7 +273,7 @@ namespace CandyShop.Controllers
             {
                 transaction.totalCost += product.price;
             }
-            return (transaction);
+            return View(transaction);
         }
 
         private bool EmployeeExists(int id)

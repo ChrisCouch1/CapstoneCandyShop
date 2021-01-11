@@ -1,0 +1,31 @@
+﻿@model CandyShop.Models.Employee
+@{
+    ViewData["Title"] = "CartList";
+}
+
+<h1>CartList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+    
+                @Html.DisplayNameFor(model => model.name)
+<table class="table">
+    @foreach (var item in Model.cart)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.productName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.productId">Remove</a> |
+                <a asp-action="Details" asp-route-id="@item.productId">Details</a>
+            </td>
+        </tr>
+    }
+    
+</table>

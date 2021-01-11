@@ -45,7 +45,7 @@
                         <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
                     </td>
                     <td>
-                        <a formaction=@Url.Action("PurchaseCart") asp-route-id="@product.productId">
+                        <a asp-action="PurchaseCart" asp-route-id="@Model.userId">
                             PURCHASE
                         </a>
                     </td>

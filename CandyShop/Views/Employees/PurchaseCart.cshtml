@@ -1,0 +1,52 @@
+﻿@model CandyShop.Models.Transaction
+
+@{
+    ViewData["Title"] = "PurchaseCart";
+}
+
+<h1>PurchaseCart</h1>
+
+<h4>Transaction</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="PurchaseCart">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="userId" />
+            <div>
+                @foreach (var product in Model.products)
+                {
+                <table>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.productName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.QTY)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.price)
+                        </td>
+                    </tr>
+                </table>
+                        }
+                </div>
+            <div class="form-group">
+                <label asp-for="totalCost" class="control-label"></label>
+                <input asp-for="totalCost" class="form-control" />
+                <span asp-validation-for="totalCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CandyShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210108201742_init")]
+    [Migration("20210111183513_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,9 +142,30 @@ namespace CandyShop.Migrations
                     b.Property<string>("supplierDetails")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("transactionId")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("productId");
 
+                    b.HasIndex("transactionId");
+
                     b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Transaction", b =>
+                {
+                    b.Property<DateTime>("transactionId")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("totalCost")
+                        .HasColumnType("float");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("transactionId");
+
+                    b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -176,22 +197,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f26b0c96-619b-4c2d-ab72-22906e816316",
-                            ConcurrencyStamp = "896b439b-4c42-45a8-8605-52466880727b",
+                            Id = "647d4a7a-f96f-4a63-b48a-ca5c5ec8a307",
+                            ConcurrencyStamp = "89ce076b-f593-42b2-95bb-e1fa57493f57",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4990a706-c476-443f-be06-32495f55df45",
-                            ConcurrencyStamp = "f59ad8ad-1618-4e3e-837f-24be5ecea358",
+                            Id = "8b640236-e3ef-474d-b510-08d97893b997",
+                            ConcurrencyStamp = "adc6171e-1732-4157-80dd-951467a87246",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "1a3db251-37cc-4302-b59f-a3e90c2e0fe5",
-                            ConcurrencyStamp = "87c24f8b-6ebf-44ab-a44d-c9c4670ad636",
+                            Id = "df78286e-9b02-43fe-b1cc-72c7d780ba56",
+                            ConcurrencyStamp = "5b6071ea-1bd8-4774-908d-c556d73d2c71",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });
@@ -385,6 +406,13 @@ namespace CandyShop.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Product", b =>
+                {
+                    b.HasOne("CandyShop.Models.Transaction", null)
+                        .WithMany("products")
+                        .HasForeignKey("transactionId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

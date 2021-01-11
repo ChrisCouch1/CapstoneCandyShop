@@ -47,21 +47,16 @@ namespace CandyShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Transaction",
                 columns: table => new
                 {
-                    productId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    category = table.Column<string>(nullable: true),
-                    productName = table.Column<string>(nullable: true),
-                    description = table.Column<string>(nullable: true),
-                    QTY = table.Column<int>(nullable: false),
-                    price = table.Column<double>(nullable: false),
-                    supplierDetails = table.Column<string>(nullable: true)
+                    transactionId = table.Column<DateTime>(nullable: false),
+                    userId = table.Column<int>(nullable: false),
+                    totalCost = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.productId);
+                    table.PrimaryKey("PK_Transaction", x => x.transactionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,20 +237,45 @@ namespace CandyShop.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f26b0c96-619b-4c2d-ab72-22906e816316", "896b439b-4c42-45a8-8605-52466880727b", "Admin", "ADMIN" });
+            migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    productId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    category = table.Column<string>(nullable: true),
+                    productName = table.Column<string>(nullable: true),
+                    description = table.Column<string>(nullable: true),
+                    QTY = table.Column<int>(nullable: false),
+                    price = table.Column<double>(nullable: false),
+                    supplierDetails = table.Column<string>(nullable: true),
+                    transactionId = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.productId);
+                    table.ForeignKey(
+                        name: "FK_Product_Transaction_transactionId",
+                        column: x => x.transactionId,
+                        principalTable: "Transaction",
+                        principalColumn: "transactionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4990a706-c476-443f-be06-32495f55df45", "f59ad8ad-1618-4e3e-837f-24be5ecea358", "Manager", "MGR" });
+                values: new object[] { "647d4a7a-f96f-4a63-b48a-ca5c5ec8a307", "89ce076b-f593-42b2-95bb-e1fa57493f57", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "1a3db251-37cc-4302-b59f-a3e90c2e0fe5", "87c24f8b-6ebf-44ab-a44d-c9c4670ad636", "Employee", "EMP" });
+                values: new object[] { "8b640236-e3ef-474d-b510-08d97893b997", "adc6171e-1732-4157-80dd-951467a87246", "Manager", "MGR" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "df78286e-9b02-43fe-b1cc-72c7d780ba56", "5b6071ea-1bd8-4774-908d-c556d73d2c71", "Employee", "EMP" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_IdentityUserId",
@@ -310,6 +330,11 @@ namespace CandyShop.Migrations
                 name: "IX_Manager_IdentityUserId",
                 table: "Manager",
                 column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_transactionId",
+                table: "Product",
+                column: "transactionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -346,6 +371,9 @@ namespace CandyShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Transaction");
         }
     }
 }
