@@ -25,13 +25,9 @@ namespace CandyShop.Controllers
         // GET: Managers
         public ActionResult Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var manager = _context.Manager.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            if (manager == null)
-            {
-                return RedirectToAction("Create");
-            }
-            return View(manager);
+            var productList = _context.Product.ToList();
+            
+            return View(productList);
         }
 
         // GET: Managers/Details/5
@@ -247,6 +243,12 @@ namespace CandyShop.Controllers
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(CreateProduct));
+        }
+
+        public ActionResult EmployeeListView()
+        {
+            var employeeList = _context.Employee.ToList();
+            return View(employeeList);
         }
     }
 

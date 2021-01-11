@@ -49,7 +49,12 @@ namespace CandyShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult TimePunch(Employee employee)
         {
-            var currentEmployee = _context.Employee.Where(e => e.userId == employee.userId).FirstOrDefault();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            if (currentEmployee == null)
+            {
+                return RedirectToAction("Create");
+            }
             if (currentEmployee.clockIn == null)
             {
                 currentEmployee.clockIn = DateTime.Now;
@@ -66,7 +71,9 @@ namespace CandyShop.Controllers
             {
                 currentEmployee.clockOut = DateTime.Now;
             }
-            return View(nameof(Index));
+            _context.Update(currentEmployee);
+            _context.SaveChanges();
+            return View(nameof(TimePunch));
         }
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -1,4 +1,4 @@
-﻿@model CandyShop.Models.Manager
+﻿@model IEnumerable<CandyShop.Models.Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -8,10 +8,52 @@
 
 <p>
     <ul>
-        <li><a href="managers/createproduct">Add New Product To Inventory</a></li>
-        <li><a href="managers/editproduct">Adjust Existing Product</a></li>
-        <li><a href="managers/deleteproduct">Remove Item from Inventory</a></li>
-        <li><a href="managers/edit">Adjust Employee Time Punch</a></li>
+        <li><button onclick="location.href='@Url.Action("createproduct", "managers")'">Add New Product To Inventory</button></li>
+        <li><button onclick="location.href='@Url.Action("employeelistview", "managers")'">Adjust Employee Time Punch</button></li>
     </ul>
 
 </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Category
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Quantity in Stock
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => product.category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.productName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.QTY)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => product.price)
+                </td>
+                <td>
+                    <a asp-action="EditProduct" value="@product.productId" asp-route-id="@product.productId">EDIT</a>
+                    <a asp-action="DeleteProduct" value="@product.productId" asp-route-id="@product.productId">DELETE</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
