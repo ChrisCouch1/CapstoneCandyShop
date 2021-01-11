@@ -23,10 +23,15 @@ namespace CandyShop.Controllers
         }
 
         // GET: Managers
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            var applicationDbContext = _context.Manager.Include(m => m.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var manager = _context.Manager.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            if (manager == null)
+            {
+                return RedirectToAction("Create");
+            }
+            return View(manager);
         }
 
         // GET: Managers/Details/5

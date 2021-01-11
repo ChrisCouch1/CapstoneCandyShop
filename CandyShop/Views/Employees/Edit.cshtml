@@ -4,41 +4,63 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Review Cart</h1>
 
-<h4>Employee</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="userId" />
-            <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="phoneNumber" class="control-label"></label>
-                <input asp-for="phoneNumber" class="form-control" />
-                <span asp-validation-for="phoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Category
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.cart)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.productName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.QTY)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.price)
+                    </td>
+                    <td>
+                        <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
+                    </td>
+                    <td>
+                        <a formaction=@Url.Action("PurchaseCart") asp-route-id="@product.productId">
+                            PURCHASE
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+</table>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

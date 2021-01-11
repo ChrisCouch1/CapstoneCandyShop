@@ -23,6 +23,12 @@ namespace CandyShop.Controllers
         // GET: Employees
         public ActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            if (employee == null)
+            {
+                return RedirectToAction("Create");
+            }
             var productList = _context.Product.ToList();
            
 
@@ -30,7 +36,12 @@ namespace CandyShop.Controllers
         }
         public ActionResult TimePunch(int id)
         {
-            var employee = _context.Employee.Where(e => e.userId == id).FirstOrDefault();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            if (employee == null)
+            {
+                return RedirectToAction("Create");
+            }
             return View(employee);
         }
 
@@ -145,7 +156,7 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("userId,IdentityUserId,name,address,phoneNumber,dateStart,dateEnd,clockIn,clockOut")] Employee employee)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.userId)
             {
