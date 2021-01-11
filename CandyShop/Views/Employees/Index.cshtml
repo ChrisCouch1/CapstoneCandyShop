@@ -9,7 +9,7 @@
 
     <span>@DateTime.Now</span>
     <form><button type="button" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="Model.userId">Clock In/Out?</button></form>
-<div style="float:right"><span><a href="edit">View Cart</a></span></div>
+<div style="float:right"><span><a asp-action="Edit" >View Cart</a></span></div>
 <table class="table">
     <thead>
         <tr>

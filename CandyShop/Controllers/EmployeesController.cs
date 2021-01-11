@@ -217,9 +217,10 @@ namespace CandyShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public void AddToCart(int userid, int productid)
+        public void AddToCart(int productid)
         {
-            var employee = _context.Employee.Where(e => e.userId == userid).SingleOrDefault();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var product = _context.Product.Where(p => p.productId == productid).SingleOrDefault();
             employee.cart.Add(product);
             
