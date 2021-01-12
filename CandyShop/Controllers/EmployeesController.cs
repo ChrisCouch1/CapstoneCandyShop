@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using CandyShop.Data;
 using CandyShop.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CandyShop.Controllers
 {
+    [Authorize(Roles = "Admin, Manager, Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -29,8 +31,7 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            List<Product> productList = _context.Product.ToList();
-           
+            List<Product> productList = _context.Product.ToList();          
 
             return View(productList);
         }
@@ -42,38 +43,76 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            return View(employee);
+            return RedirectToAction("TimePunch");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult TimePunch(Employee employee)
+        public ActionResult PunchIn(Employee employee)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            DateTime punch = new DateTime();
+            punch = DateTime.Now;
             if (currentEmployee == null)
             {
                 return RedirectToAction("Create");
             }
-            if (currentEmployee.clockIn == null)
-            {
-                currentEmployee.clockIn = DateTime.Now;
-            }
-            else if(currentEmployee.clockIn != null && currentEmployee.breakStart == null)
-            {
-                currentEmployee.breakStart = DateTime.Now;
-            }
-            else if(currentEmployee.breakStart != null && currentEmployee.breakEnd == null)
-            {
-                currentEmployee.breakEnd = DateTime.Now;
-            }
-            else if(currentEmployee.breakEnd != null && currentEmployee.clockOut == null)
-            {
-                currentEmployee.clockOut = DateTime.Now;
-            }
+            currentEmployee.clockIn = punch;          
             _context.Update(currentEmployee);
             _context.SaveChanges();
-            return View(nameof(TimePunch));
+            return RedirectToAction("TimePunch");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PunchOut(Employee employee)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            DateTime punch = new DateTime();
+            punch = DateTime.Now;
+            if (currentEmployee == null)
+            {
+                return RedirectToAction("Create");
+            }
+            currentEmployee.clockOut = punch;
+            _context.Update(currentEmployee);
+            _context.SaveChanges();
+            return RedirectToAction("TimePunch");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult BeginBreak(Employee employee)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            DateTime punch = new DateTime();
+            punch = DateTime.Now;
+            if (currentEmployee == null)
+            {
+                return RedirectToAction("Create");
+            }
+            currentEmployee.breakStart = punch;
+            _context.Update(currentEmployee);
+            _context.SaveChanges();
+            return RedirectToAction("TimePunch");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EndBreak(Employee employee)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            DateTime punch = new DateTime();
+            punch = DateTime.Now;
+            if (currentEmployee == null)
+            {
+                return RedirectToAction("Create");
+            }
+            currentEmployee.breakEnd = punch;
+            _context.Update(currentEmployee);
+            _context.SaveChanges();
+            return RedirectToAction("TimePunch");
         }
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)

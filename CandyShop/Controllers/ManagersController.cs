@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-   // [Authorize(Roles = "Admin, Manager")]
+   [Authorize(Roles = "Admin, Manager")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
