@@ -10,10 +10,15 @@ namespace CandyShop.Models
     public class WorkHoursTracker
     {
         [Key]
-        public DateTime workWeek { get; set; } //change to DateTime, make a timestamp for each clockin time.
-        
-        [ForeignKey("User")]
-        public int userId { get; set; }
+        public int trackerId { get; set; }
+
+        [ForeignKey("Employee")]
+        public int employeeId { get; set; }
+        public Employee employee { get; set; }
+        public DateTime breakStart { get; set; }
+        public DateTime breakEnd { get; set; }
+        public DateTime clockIn { get; set; }
+        public DateTime clockOut { get; set; }        
         public int hoursWorked { get; set; } //Calculate for each work period, minus break times.
     }
 }

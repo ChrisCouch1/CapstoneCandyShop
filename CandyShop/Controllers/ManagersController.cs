@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-   [Authorize(Roles = "Admin, Manager")]
+   //[Authorize(Roles = "Admin, Manager")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,11 +31,9 @@ namespace CandyShop.Controllers
         }
 
         // GET: Managers/Details/5
-        public ActionResult Details(DateTime dateTime)
-        {
-            var employeeList = _context.Employee.Where(e => e.clockIn.Day == dateTime.Day).ToList();
-            
-            return View(employeeList);
+        public ActionResult Details()
+        {            
+            return View("Details");
         }
 
         // GET: Managers/Create
@@ -88,7 +86,7 @@ namespace CandyShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Employee employee)
         {
-            if (id != employee.userId)
+            if (id != employee.employeeId)
             {
                 return NotFound();
             }
@@ -120,7 +118,7 @@ namespace CandyShop.Controllers
 
             var manager = await _context.Manager
                 .Include(m => m.IdentityUser)
-                .FirstOrDefaultAsync(m => m.userId == id);
+                .FirstOrDefaultAsync(m => m.managerId == id);
             if (manager == null)
             {
                 return NotFound();
@@ -142,7 +140,7 @@ namespace CandyShop.Controllers
 
         private bool ManagerExists(int id)
         {
-            return _context.Manager.Any(e => e.userId == id);
+            return _context.Manager.Any(e => e.managerId == id);
         }
 
         // GET: Managers/EditProduct/5

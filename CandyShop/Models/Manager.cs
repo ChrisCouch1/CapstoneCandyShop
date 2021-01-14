@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace CandyShop.Models
 {
-    public class Manager : User
+    public class Manager
     {
         [Key]
-        public int userId { get; set; }
+        public int managerId { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
@@ -20,10 +20,6 @@ namespace CandyShop.Models
         public string name { get; set; }
         public string address { get; set; }
         public string phoneNumber { get; set; }
-        public DateTime breakStart { get; set; }
-        public DateTime breakEnd { get; set; }
-        public DateTime clockIn { get; set; }
-        public DateTime clockOut { get; set; }
 
     }
 }

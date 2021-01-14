@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace CandyShop.Models
 {
-    public class Admin : User
+    public class Admin
     {
         [Key]
-        public int userId { get; set; }
+        public int adminId { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }

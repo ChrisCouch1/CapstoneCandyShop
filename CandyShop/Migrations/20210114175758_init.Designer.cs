@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CandyShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210111183513_init")]
+    [Migration("20210114175758_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace CandyShop.Migrations
 
             modelBuilder.Entity("CandyShop.Models.Admin", b =>
                 {
-                    b.Property<int>("userId")
+                    b.Property<int>("adminId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -34,7 +34,7 @@ namespace CandyShop.Migrations
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("userId");
+                    b.HasKey("adminId");
 
                     b.HasIndex("IdentityUserId");
 
@@ -43,7 +43,7 @@ namespace CandyShop.Migrations
 
             modelBuilder.Entity("CandyShop.Models.Employee", b =>
                 {
-                    b.Property<int>("userId")
+                    b.Property<int>("employeeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -54,34 +54,44 @@ namespace CandyShop.Migrations
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("breakEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("breakStart")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("clockIn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("clockOut")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("phoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("userId");
+                    b.HasKey("employeeId");
 
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Employee");
                 });
 
+            modelBuilder.Entity("CandyShop.Models.EmployeeTransactionViewModel", b =>
+                {
+                    b.Property<int>("employeeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("employeeId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("transactionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("employeeId");
+
+                    b.HasIndex("employeeId1");
+
+                    b.HasIndex("transactionId");
+
+                    b.ToTable("EmployeeTransactionViewModels");
+                });
+
             modelBuilder.Entity("CandyShop.Models.Manager", b =>
                 {
-                    b.Property<int>("userId")
+                    b.Property<int>("managerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -92,25 +102,13 @@ namespace CandyShop.Migrations
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("breakEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("breakStart")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("clockIn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("clockOut")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("phoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("userId");
+                    b.HasKey("managerId");
 
                     b.HasIndex("IdentityUserId");
 
@@ -123,6 +121,9 @@ namespace CandyShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("EmployeeTransactionViewModelemployeeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QTY")
                         .HasColumnType("int");
@@ -142,10 +143,12 @@ namespace CandyShop.Migrations
                     b.Property<string>("supplierDetails")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("transactionId")
-                        .HasColumnType("datetime2");
+                    b.Property<int?>("transactionId")
+                        .HasColumnType("int");
 
                     b.HasKey("productId");
+
+                    b.HasIndex("EmployeeTransactionViewModelemployeeId");
 
                     b.HasIndex("transactionId");
 
@@ -154,18 +157,50 @@ namespace CandyShop.Migrations
 
             modelBuilder.Entity("CandyShop.Models.Transaction", b =>
                 {
-                    b.Property<DateTime>("transactionId")
+                    b.Property<int>("transactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("employeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isComplete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("timestamp")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("totalCost")
                         .HasColumnType("float");
 
-                    b.Property<int>("userId")
+                    b.HasKey("transactionId");
+
+                    b.HasIndex("employeeId");
+
+                    b.ToTable("Transaction");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.TransactionProducts", b =>
+                {
+                    b.Property<int>("transactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("transactionId1")
                         .HasColumnType("int");
 
                     b.HasKey("transactionId");
 
-                    b.ToTable("Transaction");
+                    b.HasIndex("productId");
+
+                    b.HasIndex("transactionId1");
+
+                    b.ToTable("TransactionProducts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -197,22 +232,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "647d4a7a-f96f-4a63-b48a-ca5c5ec8a307",
-                            ConcurrencyStamp = "89ce076b-f593-42b2-95bb-e1fa57493f57",
+                            Id = "85c4627d-493d-4cf6-ac36-e1a2919f0671",
+                            ConcurrencyStamp = "80ed2eb4-5b1c-479a-943d-9b65bb82006f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8b640236-e3ef-474d-b510-08d97893b997",
-                            ConcurrencyStamp = "adc6171e-1732-4157-80dd-951467a87246",
+                            Id = "c1324077-4b0a-407c-88be-28998223c6c1",
+                            ConcurrencyStamp = "fc4fc471-8fe4-44b9-b9aa-0b8b9e644b91",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "df78286e-9b02-43fe-b1cc-72c7d780ba56",
-                            ConcurrencyStamp = "5b6071ea-1bd8-4774-908d-c556d73d2c71",
+                            Id = "f4151c03-ab9b-44a6-9a02-0ca6da311a9c",
+                            ConcurrencyStamp = "b07137ed-2aae-4752-8ac6-920e3e80fbbf",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });
@@ -401,6 +436,19 @@ namespace CandyShop.Migrations
                         .HasForeignKey("IdentityUserId");
                 });
 
+            modelBuilder.Entity("CandyShop.Models.EmployeeTransactionViewModel", b =>
+                {
+                    b.HasOne("CandyShop.Models.Employee", "employee")
+                        .WithMany()
+                        .HasForeignKey("employeeId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CandyShop.Models.Transaction", "transaction")
+                        .WithMany()
+                        .HasForeignKey("transactionId");
+                });
+
             modelBuilder.Entity("CandyShop.Models.Manager", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
@@ -410,9 +458,37 @@ namespace CandyShop.Migrations
 
             modelBuilder.Entity("CandyShop.Models.Product", b =>
                 {
+                    b.HasOne("CandyShop.Models.EmployeeTransactionViewModel", null)
+                        .WithMany("listOfProducts")
+                        .HasForeignKey("EmployeeTransactionViewModelemployeeId");
+
                     b.HasOne("CandyShop.Models.Transaction", null)
                         .WithMany("products")
                         .HasForeignKey("transactionId");
+                });
+
+            modelBuilder.Entity("CandyShop.Models.Transaction", b =>
+                {
+                    b.HasOne("CandyShop.Models.Employee", "employee")
+                        .WithMany()
+                        .HasForeignKey("employeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CandyShop.Models.TransactionProducts", b =>
+                {
+                    b.HasOne("CandyShop.Models.Product", "product")
+                        .WithMany()
+                        .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CandyShop.Models.Transaction", "transaction")
+                        .WithMany()
+                        .HasForeignKey("transactionId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

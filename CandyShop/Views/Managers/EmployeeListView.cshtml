@@ -46,19 +46,19 @@
                 @Html.DisplayFor(modelItem => item.phoneNumber)
             </td>            
             <td>
-                @Html.DisplayFor(modelItem => item.clockIn)
+                @Html.DisplayFor(modelItem => item)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.breakStart)
+                @Html.DisplayFor(modelItem => item)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.breakEnd)
+                @Html.DisplayFor(modelItem => item)
             </td>            
             <td>
-                @Html.DisplayFor(modelItem => item.clockOut)
+                @Html.DisplayFor(modelItem => item)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.userId">Edit Time</a>
+                <a asp-action="Edit" asp-route-id="@item.employeeId">Edit Time</a>
             </td>
         </tr>
 }

@@ -47,19 +47,6 @@ namespace CandyShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transaction",
-                columns: table => new
-                {
-                    transactionId = table.Column<DateTime>(nullable: false),
-                    userId = table.Column<int>(nullable: false),
-                    totalCost = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transaction", x => x.transactionId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -84,14 +71,14 @@ namespace CandyShop.Migrations
                 name: "Admin",
                 columns: table => new
                 {
-                    userId = table.Column<int>(nullable: false)
+                    adminId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdentityUserId = table.Column<string>(nullable: true),
                     name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admin", x => x.userId);
+                    table.PrimaryKey("PK_Admin", x => x.adminId);
                     table.ForeignKey(
                         name: "FK_Admin_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
@@ -189,20 +176,16 @@ namespace CandyShop.Migrations
                 name: "Employee",
                 columns: table => new
                 {
-                    userId = table.Column<int>(nullable: false)
+                    employeeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdentityUserId = table.Column<string>(nullable: true),
                     name = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
-                    phoneNumber = table.Column<string>(nullable: true),
-                    breakStart = table.Column<DateTime>(nullable: false),
-                    breakEnd = table.Column<DateTime>(nullable: false),
-                    clockIn = table.Column<DateTime>(nullable: false),
-                    clockOut = table.Column<DateTime>(nullable: false)
+                    phoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employee", x => x.userId);
+                    table.PrimaryKey("PK_Employee", x => x.employeeId);
                     table.ForeignKey(
                         name: "FK_Employee_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
@@ -215,25 +198,69 @@ namespace CandyShop.Migrations
                 name: "Manager",
                 columns: table => new
                 {
-                    userId = table.Column<int>(nullable: false)
+                    managerId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdentityUserId = table.Column<string>(nullable: true),
                     name = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
-                    phoneNumber = table.Column<string>(nullable: true),
-                    breakStart = table.Column<DateTime>(nullable: false),
-                    breakEnd = table.Column<DateTime>(nullable: false),
-                    clockIn = table.Column<DateTime>(nullable: false),
-                    clockOut = table.Column<DateTime>(nullable: false)
+                    phoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Manager", x => x.userId);
+                    table.PrimaryKey("PK_Manager", x => x.managerId);
                     table.ForeignKey(
                         name: "FK_Manager_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transaction",
+                columns: table => new
+                {
+                    transactionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    employeeId = table.Column<int>(nullable: false),
+                    totalCost = table.Column<double>(nullable: false),
+                    timestamp = table.Column<DateTime>(nullable: false),
+                    isComplete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transaction", x => x.transactionId);
+                    table.ForeignKey(
+                        name: "FK_Transaction_Employee_employeeId",
+                        column: x => x.employeeId,
+                        principalTable: "Employee",
+                        principalColumn: "employeeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeTransactionViewModels",
+                columns: table => new
+                {
+                    employeeId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    employeeId1 = table.Column<int>(nullable: false),
+                    transactionId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeTransactionViewModels", x => x.employeeId);
+                    table.ForeignKey(
+                        name: "FK_EmployeeTransactionViewModels_Employee_employeeId1",
+                        column: x => x.employeeId1,
+                        principalTable: "Employee",
+                        principalColumn: "employeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeTransactionViewModels_Transaction_transactionId",
+                        column: x => x.transactionId,
+                        principalTable: "Transaction",
+                        principalColumn: "transactionId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -249,11 +276,18 @@ namespace CandyShop.Migrations
                     QTY = table.Column<int>(nullable: false),
                     price = table.Column<double>(nullable: false),
                     supplierDetails = table.Column<string>(nullable: true),
-                    transactionId = table.Column<DateTime>(nullable: true)
+                    EmployeeTransactionViewModelemployeeId = table.Column<int>(nullable: true),
+                    transactionId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.productId);
+                    table.ForeignKey(
+                        name: "FK_Product_EmployeeTransactionViewModels_EmployeeTransactionViewModelemployeeId",
+                        column: x => x.EmployeeTransactionViewModelemployeeId,
+                        principalTable: "EmployeeTransactionViewModels",
+                        principalColumn: "employeeId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_Transaction_transactionId",
                         column: x => x.transactionId,
@@ -262,20 +296,46 @@ namespace CandyShop.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "647d4a7a-f96f-4a63-b48a-ca5c5ec8a307", "89ce076b-f593-42b2-95bb-e1fa57493f57", "Admin", "ADMIN" });
+            migrationBuilder.CreateTable(
+                name: "TransactionProducts",
+                columns: table => new
+                {
+                    transactionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    transactionId1 = table.Column<int>(nullable: false),
+                    productId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransactionProducts", x => x.transactionId);
+                    table.ForeignKey(
+                        name: "FK_TransactionProducts_Product_productId",
+                        column: x => x.productId,
+                        principalTable: "Product",
+                        principalColumn: "productId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TransactionProducts_Transaction_transactionId1",
+                        column: x => x.transactionId1,
+                        principalTable: "Transaction",
+                        principalColumn: "transactionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "8b640236-e3ef-474d-b510-08d97893b997", "adc6171e-1732-4157-80dd-951467a87246", "Manager", "MGR" });
+                values: new object[] { "85c4627d-493d-4cf6-ac36-e1a2919f0671", "80ed2eb4-5b1c-479a-943d-9b65bb82006f", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "df78286e-9b02-43fe-b1cc-72c7d780ba56", "5b6071ea-1bd8-4774-908d-c556d73d2c71", "Employee", "EMP" });
+                values: new object[] { "c1324077-4b0a-407c-88be-28998223c6c1", "fc4fc471-8fe4-44b9-b9aa-0b8b9e644b91", "Manager", "MGR" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "f4151c03-ab9b-44a6-9a02-0ca6da311a9c", "b07137ed-2aae-4752-8ac6-920e3e80fbbf", "Employee", "EMP" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_IdentityUserId",
@@ -327,14 +387,44 @@ namespace CandyShop.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployeeTransactionViewModels_employeeId1",
+                table: "EmployeeTransactionViewModels",
+                column: "employeeId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeTransactionViewModels_transactionId",
+                table: "EmployeeTransactionViewModels",
+                column: "transactionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Manager_IdentityUserId",
                 table: "Manager",
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Product_EmployeeTransactionViewModelemployeeId",
+                table: "Product",
+                column: "EmployeeTransactionViewModelemployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Product_transactionId",
                 table: "Product",
                 column: "transactionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_employeeId",
+                table: "Transaction",
+                column: "employeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionProducts_productId",
+                table: "TransactionProducts",
+                column: "productId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionProducts_transactionId1",
+                table: "TransactionProducts",
+                column: "transactionId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -358,22 +448,28 @@ namespace CandyShop.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Employee");
-
-            migrationBuilder.DropTable(
                 name: "Manager");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "TransactionProducts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "EmployeeTransactionViewModels");
 
             migrationBuilder.DropTable(
                 name: "Transaction");
+
+            migrationBuilder.DropTable(
+                name: "Employee");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

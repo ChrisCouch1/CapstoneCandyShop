@@ -26,30 +26,6 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in Model.cart)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.category)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.productName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.QTY)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.price)
-                    </td>
-                    <td>
-                        <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
-                    </td>
-                    <td>
-                        <a asp-action="PurchaseCart" asp-route-id="@Model.userId">
-                            PURCHASE
-                        </a>
-                    </td>
-                </tr>
             }
         </tbody>
 </table>

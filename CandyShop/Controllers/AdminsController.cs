@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -48,7 +48,7 @@ namespace CandyShop.Controllers
             userId).SingleOrDefault();
             admin = await _context.Admin
                 .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.userId == id);
+                .FirstOrDefaultAsync(m => m.adminId == id);
             if (admin == null)
             {
                 return NotFound();
@@ -108,7 +108,7 @@ namespace CandyShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Admin admin)
         {
-            if (id != admin.userId)
+            if (id != admin.adminId)
             {
                 return NotFound();
             }
@@ -122,7 +122,7 @@ namespace CandyShop.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdminExists(admin.userId))
+                    if (!AdminExists(admin.adminId))
                     {
                         return NotFound();
                     }
@@ -147,7 +147,7 @@ namespace CandyShop.Controllers
 
             var admin = await _context.Admin
                 .Include(a => a.IdentityUser)
-                .FirstOrDefaultAsync(m => m.userId == id);
+                .FirstOrDefaultAsync(m => m.adminId == id);
             if (admin == null)
             {
                 return NotFound();
@@ -169,7 +169,7 @@ namespace CandyShop.Controllers
 
         private bool AdminExists(int id)
         {
-            return _context.Admin.Any(e => e.userId == id);
+            return _context.Admin.Any(e => e.adminId == id);
         }
     }
 }

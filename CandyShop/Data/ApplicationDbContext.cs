@@ -35,11 +35,21 @@ namespace CandyShop.Data
                 NormalizedName = "EMP"
             }
             );
+            
+            base.OnModelCreating(builder);
+            builder.Entity<EmployeeTransactionViewModel>()
+            .HasKey(e => new { e.employeeId });
+
+            base.OnModelCreating(builder);
+            builder.Entity<TransactionProducts>()
+            .HasKey(t => new { t.transactionId });
         }
         public DbSet<CandyShop.Models.Employee> Employee { get; set; }
         public DbSet<CandyShop.Models.Manager> Manager { get; set; }
         public DbSet<CandyShop.Models.Admin> Admin { get; set; }
         public DbSet<CandyShop.Models.Product> Product { get; set; }
         public DbSet<CandyShop.Models.Transaction> Transaction { get; set; }
+        public DbSet<CandyShop.Models.TransactionProducts> TransactionProducts { get; set; }
+        public DbSet<CandyShop.Models.EmployeeTransactionViewModel> EmployeeTransactionViewModels { get; set; }
     }
 }

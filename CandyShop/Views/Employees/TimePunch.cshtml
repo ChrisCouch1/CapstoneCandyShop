@@ -20,17 +20,17 @@
     <tbody>
         <tr>
             <td>@Html.DisplayFor(model => model.name)</td>
-            <td>@Html.DisplayFor(model => model.clockIn)</td>
-            <td>@Html.DisplayFor(model => model.breakStart)</td>
-            <td>@Html.DisplayFor(model => model.breakEnd)</td>
-            <td>@Html.DisplayFor(model => model.clockOut)</td>
+            <td>@Html.DisplayFor(model => model)</td>
+            <td>@Html.DisplayFor(model => model)</td>
+            <td>@Html.DisplayFor(model => model)</td>
+            <td>@Html.DisplayFor(model => model)</td>
         </tr>
     </tbody>
 </table>
-<button class="btn-light"><a asp-action="PunchIn" id="@Model.userId" asp-route-id="@Model.userId">Clock In</a></button>
-<button class="btn-light"><a asp-action="PunchOut" id="@Model.userId" asp-route-id="@Model.userId">Clock Out</a></button>
-<button class="btn-light"><a asp-action="BeginBreak" id="@Model.userId" asp-route-id="@Model.userId">Start Break</a></button>
-<button class="btn-light"><a asp-action="EndBreak" id="@Model.userId" asp-route-id="@Model.userId">End Break</a></button>
+<button class="btn-light"><a asp-action="PunchIn" id="@Model.employeeId" asp-route-id="@Model.employeeId">Clock In</a></button>
+<button class="btn-light"><a asp-action="PunchOut" id="@Model.employeeId" asp-route-id="@Model.employeeId">Clock Out</a></button>
+<button class="btn-light"><a asp-action="BeginBreak" id="@Model.employeeId" asp-route-id="@Model.employeeId">Start Break</a></button>
+<button class="btn-light"><a asp-action="EndBreak" id="@Model.employeeId" asp-route-id="@Model.employeeId">End Break</a></button>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

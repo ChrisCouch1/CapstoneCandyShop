@@ -7,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace CandyShop.Models
 {
-    public class Transaction
+    public class EmployeeTransactionViewModel
     {
-        [Key]
-        public int transactionId { get; set; }
-
-        [ForeignKey("Employee")]
         public int employeeId { get; set; }
         public Employee employee { get; set; }
-        public List <Product> products { get; set; } 
-        public double totalCost { get; set; }
-        public DateTime timestamp { get; set; }
-        public bool isComplete { get; set; }
-
+        public int? transactionId { get; set; }
+        public Transaction transaction { get; set; }
+        public List<Product> listOfProducts { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CandyShop.Controllers
 {
-    [Authorize(Roles = "Admin, Manager, Employee")]
+    //[Authorize(Roles = "Admin, Manager, Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,13 +27,20 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+            var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
             if (employee == null)
             {
                 return RedirectToAction("Create");
             }
-            List<Product> productList = _context.Product.ToList();          
+            if (viewModel == null)
+            {
+                viewModel = new EmployeeTransactionViewModel();
+                viewModel.employee = employee;
+            }
+            List<Product> productList = _context.Product.ToList();
+            viewModel.listOfProducts = productList;
 
-            return View(productList);
+            return View(viewModel);
         }
         public ActionResult TimePunch(int id)
         {
@@ -58,7 +65,7 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            currentEmployee.clockIn = punch;          
+                    
             _context.Update(currentEmployee);
             _context.SaveChanges();
             return RedirectToAction("TimePunch");
@@ -75,7 +82,7 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            currentEmployee.clockOut = punch;
+            
             _context.Update(currentEmployee);
             _context.SaveChanges();
             return RedirectToAction("TimePunch");
@@ -92,7 +99,7 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            currentEmployee.breakStart = punch;
+            
             _context.Update(currentEmployee);
             _context.SaveChanges();
             return RedirectToAction("TimePunch");
@@ -109,7 +116,7 @@ namespace CandyShop.Controllers
             {
                 return RedirectToAction("Create");
             }
-            currentEmployee.breakEnd = punch;
+            
             _context.Update(currentEmployee);
             _context.SaveChanges();
             return RedirectToAction("TimePunch");
@@ -126,7 +133,7 @@ namespace CandyShop.Controllers
             userId).SingleOrDefault();
             employee = await _context.Employee
                 .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.userId == id);
+                .FirstOrDefaultAsync(m => m.employeeId == id);
             if (employee == null)
             {
                 return NotFound();
@@ -204,7 +211,7 @@ namespace CandyShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Employee employee)
         {
-            if (id != employee.userId)
+            if (id != employee.employeeId)
             {
                 return NotFound();
             }
@@ -218,7 +225,7 @@ namespace CandyShop.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.userId))
+                    if (!EmployeeExists(employee.employeeId))
                     {
                         return NotFound();
                     }
@@ -243,7 +250,7 @@ namespace CandyShop.Controllers
 
             var employee = await _context.Employee
                 .Include(e => e.IdentityUser)
-                .FirstOrDefaultAsync(m => m.userId == id);
+                .FirstOrDefaultAsync(m => m.employeeId == id);
             if (employee == null)
             {
                 return NotFound();
@@ -266,8 +273,17 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var cartList = employee.cart.ToList();
-            return View(nameof(CartList));
+            var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
+            var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+            var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
+            viewModel.transaction = transaction;
+            foreach(TransactionProducts tp in productList)
+            {
+                var product = _context.Product.Where(p => p.productId == tp.productId).FirstOrDefault();
+                viewModel.transaction.products.Add(product);
+            }
+            
+            return View(viewModel);
 
         }
         
@@ -276,18 +292,58 @@ namespace CandyShop.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             Product product = _context.Product.Where(p => p.productId == id).SingleOrDefault();
-            if (employee.cart == null)
+            var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employeeId == employee.employeeId).FirstOrDefault();
+            var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+            if(viewModel == null)
             {
-                employee.cart = new List<Product>();
-                employee.cart.Add(product);
+                viewModel = new EmployeeTransactionViewModel();
+                viewModel.employee = employee;
             }
-            else
+            if(transaction != null)
             {
-                employee.cart.Add(product);
+                var transactionproducts = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
+                foreach (TransactionProducts tp in transactionproducts)
+                {
+                    var productInTransaction = _context.Product.Where(p => p.productId == tp.productId).FirstOrDefault();
+                    transaction.products.Add(product);
+                }
+                if (transaction.products.Contains(product))
+                {
+                    product.QTY++;
+                    viewModel.transaction = transaction;
+                    _context.Transaction.Update(viewModel.transaction);
+                }
+                else
+                {
+                    product.QTY = 1;
+                    transaction.products.Add(product);
+                    viewModel.transaction = transaction;
+                    _context.Transaction.Update(viewModel.transaction);
+                }
+                
             }
-            _context.Update(employee);
+            if(transaction == null)
+            {
+                var newTransaction = new Transaction();                
+                newTransaction.timestamp = DateTime.Now;
+                newTransaction.isComplete = false;
+                newTransaction.products = new List<Product>();
+                product.QTY = 1;                
+                newTransaction.products.Add(product);
+                TransactionProducts transactionProducts = new TransactionProducts();
+                transactionProducts.transaction = newTransaction;
+                transactionProducts.product = product;
+                newTransaction.employee = employee;
+                newTransaction.employeeId = employee.employeeId;
+                viewModel.transaction = newTransaction;
+                _context.Transaction.Update(newTransaction);
+                _context.TransactionProducts.Update(transactionProducts);
+            }
+            
+            _context.Employee.Update(viewModel.employee);
+            _context.EmployeeTransactionViewModels.Update(viewModel);
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return View(viewModel);
         }
 
         public ActionResult RemoveFromCart(int productId)
@@ -295,29 +351,28 @@ namespace CandyShop.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var product = _context.Product.Where(p => p.productId == productId).SingleOrDefault();
-            employee.cart.Remove(product);
-            
+            var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
+            viewModel.transaction.products.Remove(product);
+            _context.Update(viewModel);
             _context.SaveChanges();
-            return View(nameof(CartList));
+            return View(viewModel);
         }
 
-        public ActionResult PurchaseCart(int id)
+        public ActionResult PurchaseCart()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            Transaction transaction = new Transaction();
-            transaction.products = employee.cart;
-             
-            foreach(var product in employee.cart)
+            var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
+            foreach(Product product in viewModel.transaction.products)
             {
-                transaction.totalCost += product.price;
+                viewModel.transaction.totalCost += (product.price * product.QTY);
             }
-            return View(transaction);
+            return View(viewModel);
         }
 
         private bool EmployeeExists(int id)
         {
-            return _context.Employee.Any(e => e.userId == id);
+            return _context.Employee.Any(e => e.employeeId == id);
             
         }
     }
