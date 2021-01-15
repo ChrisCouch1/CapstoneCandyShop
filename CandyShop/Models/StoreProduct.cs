@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CandyShop.Models
 {
-    public class Product
+    public class StoreProduct
     {
         [Key]
         public int productId { get; set; }

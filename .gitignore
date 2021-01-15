@@ -9,6 +9,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+**/API_Keys/*
+!**/API_Keys/*
+CandyShop/API_Keys/Keys.cs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -348,3 +351,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+API_Keys
+*.Keys.cs

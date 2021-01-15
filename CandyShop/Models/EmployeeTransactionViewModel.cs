@@ -13,6 +13,6 @@ namespace CandyShop.Models
         public Employee employee { get; set; }
         public int? transactionId { get; set; }
         public Transaction transaction { get; set; }
-        public List<Product> listOfProducts { get; set; }
+        public List<StoreProduct> listOfProducts { get; set; }
     }
 }

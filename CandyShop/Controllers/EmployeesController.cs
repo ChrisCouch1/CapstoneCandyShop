@@ -9,6 +9,7 @@ using CandyShop.Data;
 using CandyShop.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Stripe;
 
 namespace CandyShop.Controllers
 {
@@ -37,7 +38,7 @@ namespace CandyShop.Controllers
                 viewModel = new EmployeeTransactionViewModel();
                 viewModel.employee = employee;
             }
-            List<Product> productList = _context.Product.ToList();
+            List<StoreProduct> productList = _context.StoreProduct.ToList();
             viewModel.listOfProducts = productList;
 
             return View(viewModel);
@@ -275,11 +276,11 @@ namespace CandyShop.Controllers
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
             var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
-            var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
+            var productList = _context.TransactionProducts.Where(tp => tp.transactionId == transaction.transactionId).ToList();
             viewModel.transaction = transaction;
             foreach(TransactionProducts tp in productList)
             {
-                var product = _context.Product.Where(p => p.productId == tp.productId).FirstOrDefault();
+                var product = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
                 viewModel.transaction.products.Add(product);
             }
             
@@ -291,7 +292,7 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            Product product = _context.Product.Where(p => p.productId == id).SingleOrDefault();
+            StoreProduct product = _context.StoreProduct.Where(p => p.productId == id).SingleOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employeeId == employee.employeeId).FirstOrDefault();
             var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
             if(viewModel == null)
@@ -304,7 +305,7 @@ namespace CandyShop.Controllers
                 var transactionproducts = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
                 foreach (TransactionProducts tp in transactionproducts)
                 {
-                    var productInTransaction = _context.Product.Where(p => p.productId == tp.productId).FirstOrDefault();
+                    var productInTransaction = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
                     transaction.products.Add(product);
                 }
                 if (transaction.products.Contains(product))
@@ -327,7 +328,7 @@ namespace CandyShop.Controllers
                 var newTransaction = new Transaction();                
                 newTransaction.timestamp = DateTime.Now;
                 newTransaction.isComplete = false;
-                newTransaction.products = new List<Product>();
+                newTransaction.products = new List<StoreProduct>();
                 product.QTY = 1;                
                 newTransaction.products.Add(product);
                 TransactionProducts transactionProducts = new TransactionProducts();
@@ -346,13 +347,21 @@ namespace CandyShop.Controllers
             return View(viewModel);
         }
 
-        public ActionResult RemoveFromCart(int productId)
+        public ActionResult RemoveFromCart(int? id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var product = _context.Product.Where(p => p.productId == productId).SingleOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
-            viewModel.transaction.products.Remove(product);
+            var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+            var productList = _context.TransactionProducts.Where(tp => tp.transactionId == transaction.transactionId).ToList();
+            viewModel.transaction = transaction;
+            foreach (TransactionProducts tp in productList)
+            {
+                var product = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
+                viewModel.transaction.products.Add(product);
+            }
+            var productToRemove = _context.StoreProduct.Where(p => p.productId == id).SingleOrDefault();
+            viewModel.transaction.products.Remove(productToRemove);
             _context.Update(viewModel);
             _context.SaveChanges();
             return View(viewModel);
@@ -363,7 +372,7 @@ namespace CandyShop.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
-            foreach(Product product in viewModel.transaction.products)
+            foreach(StoreProduct product in viewModel.transaction.products)
             {
                 viewModel.transaction.totalCost += (product.price * product.QTY);
             }

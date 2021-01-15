@@ -50,7 +50,7 @@
                     <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
                 </td>
                 <td>
-                    <button><a asp-action="RemoveFromCart" id="@product.productId" asp-route-id="@product.productId">Remove</a></button>
+                    <button><a asp-action="RemoveFromCart" asp-route-id="@product.productId">Remove</a></button>
                 </td>
             </tr>
         }

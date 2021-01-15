@@ -25,7 +25,7 @@ namespace CandyShop.Controllers
         // GET: Managers
         public ActionResult Index()
         {
-            var productList = _context.Product.ToList();
+            var productList = _context.StoreProduct.ToList();
             
             return View(productList);
         }
@@ -151,7 +151,7 @@ namespace CandyShop.Controllers
                 return NotFound();
             }
 
-            var productEdit = await _context.Product.FindAsync(id);
+            var productEdit = await _context.StoreProduct.FindAsync(id);
             if (productEdit == null)
             {
                 return NotFound();
@@ -165,7 +165,7 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(int id, Product product)
+        public async Task<IActionResult> EditProduct(int id, StoreProduct product)
         {
             if (id != product.productId)
             {
@@ -201,7 +201,7 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct(StoreProduct product)
         {
             if (ModelState.IsValid)
             {
@@ -221,7 +221,7 @@ namespace CandyShop.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var product = await _context.StoreProduct
                 .Include(p => p.productId)
                 .FirstOrDefaultAsync(p => p.productId == id);
             if (product == null)
@@ -237,8 +237,8 @@ namespace CandyShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProductConfirmed(int id)
         {
-            var product = await _context.Product.FindAsync(id);
-            _context.Product.Remove(product);
+            var product = await _context.StoreProduct.FindAsync(id);
+            _context.StoreProduct.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(CreateProduct));
         }

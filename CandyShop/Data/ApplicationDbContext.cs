@@ -47,9 +47,11 @@ namespace CandyShop.Data
         public DbSet<CandyShop.Models.Employee> Employee { get; set; }
         public DbSet<CandyShop.Models.Manager> Manager { get; set; }
         public DbSet<CandyShop.Models.Admin> Admin { get; set; }
-        public DbSet<CandyShop.Models.Product> Product { get; set; }
+        public DbSet<CandyShop.Models.StoreProduct> StoreProduct { get; set; }
         public DbSet<CandyShop.Models.Transaction> Transaction { get; set; }
         public DbSet<CandyShop.Models.TransactionProducts> TransactionProducts { get; set; }
         public DbSet<CandyShop.Models.EmployeeTransactionViewModel> EmployeeTransactionViewModels { get; set; }
+        public DbSet<CandyShop.Models.WorkHoursTracker> WorkHoursTrackers { get; set; }
+        public DbSet<CandyShop.Models.EmployeeWorkTrackerViewModel> EmployeeWorkTrackerViewModels { get; set; }
     }
 }

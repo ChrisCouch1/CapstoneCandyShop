@@ -10,6 +10,6 @@ namespace CandyShop.Models
         public int transactionId { get; set; }
         public Transaction transaction { get; set; }
         public int productId { get; set; }
-        public Product product { get; set; }
+        public StoreProduct product { get; set; }
     }
 }

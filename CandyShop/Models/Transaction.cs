@@ -15,7 +15,7 @@ namespace CandyShop.Models
         [ForeignKey("Employee")]
         public int employeeId { get; set; }
         public Employee employee { get; set; }
-        public List <Product> products { get; set; } 
+        public List <StoreProduct> products { get; set; } 
         public double totalCost { get; set; }
         public DateTime timestamp { get; set; }
         public bool isComplete { get; set; }
