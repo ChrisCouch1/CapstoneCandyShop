@@ -151,7 +151,7 @@ namespace CandyShop.Controllers
                 return NotFound();
             }
             
-            var product = _context.Product.Where(p => p.productId ==
+            var product = _context.StoreProduct.Where(p => p.productId ==
             id).SingleOrDefault();
             if (product == null)
             {

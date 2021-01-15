@@ -192,7 +192,7 @@ namespace CandyShop.Controllers
         // GET: Managers/CreateProduct
         public IActionResult CreateProduct()
         {
-            ViewData["CreateProduct"] = new SelectList(_context.Product, "Id", "Id");
+            ViewData["CreateProduct"] = new SelectList(_context.StoreProduct, "Id", "Id");
             return View();
         }
 
@@ -209,7 +209,7 @@ namespace CandyShop.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(CreateProduct));
             }
-            ViewData["CreateProduct"] = new SelectList(_context.Product, "Id", "Id", product.productId);
+            ViewData["CreateProduct"] = new SelectList(_context.StoreProduct, "Id", "Id", product.productId);
             return View(product);
         }
 

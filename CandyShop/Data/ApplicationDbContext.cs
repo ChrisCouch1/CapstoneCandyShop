@@ -43,6 +43,10 @@ namespace CandyShop.Data
             base.OnModelCreating(builder);
             builder.Entity<TransactionProducts>()
             .HasKey(t => new { t.transactionId });
+
+            base.OnModelCreating(builder);
+            builder.Entity<EmployeeWorkTrackerViewModel>()
+            .HasKey(e => new { e.employeeId });
         }
         public DbSet<CandyShop.Models.Employee> Employee { get; set; }
         public DbSet<CandyShop.Models.Manager> Manager { get; set; }
