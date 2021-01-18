@@ -47,9 +47,7 @@
             @Html.DisplayFor(model => model.supplierDetails)
         </dd>
         </dl>
-    <a formaction=@Url.Action("AddToCart") value="@Model.productId" asp-route-id="@Model.productId">
-    <span class="btn btn-danger"></span>Add to Cart
-    </a>
+    <button><a asp-action="AddToCart" asp-route-id="@product.productId">Add to Cart</a></button>
 </div>
 <div>
     <a asp-action="Index">Back to List</a>
