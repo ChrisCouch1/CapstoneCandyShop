@@ -3,11 +3,8 @@
     ViewData["Title"] = "CartList";
 }
 
-<h1>CartList</h1>
+<h1>Your Cart</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 
     
                 @Html.DisplayNameFor(model => model.employee.name)
@@ -19,9 +16,6 @@
             </th>
             <th>
                 Product Name
-            </th>
-            <th>
-                Quantity
             </th>
             <th>
                 Price
@@ -41,9 +35,6 @@
                     @Html.DisplayFor(modelItem => product.productName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => product.QTY)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => product.price)
                 </td>
                 <td>
@@ -56,3 +47,4 @@
         }
     </tbody>
 </table>
+<h2>Sub-total : $@Model.transaction.products.Sum(p => p.price)</h2>
