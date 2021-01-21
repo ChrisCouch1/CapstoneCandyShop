@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CandyShop.Migrations
 {
-    public partial class init : Migration
+    public partial class initi : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -268,6 +268,7 @@ namespace CandyShop.Migrations
                 {
                     employeeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeTransactionViewModelId = table.Column<int>(nullable: false),
                     employeeId1 = table.Column<int>(nullable: false),
                     transactionId = table.Column<int>(nullable: true)
                 },
@@ -294,6 +295,7 @@ namespace CandyShop.Migrations
                 {
                     employeeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeWorkTrackerViewModelId = table.Column<int>(nullable: false),
                     employeeId1 = table.Column<int>(nullable: false),
                     trackerId = table.Column<int>(nullable: false),
                     hoursTrackertrackerId = table.Column<int>(nullable: true)
@@ -353,6 +355,7 @@ namespace CandyShop.Migrations
                 {
                     transactionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    transactionProductId = table.Column<int>(nullable: false),
                     transactionId1 = table.Column<int>(nullable: false),
                     productId = table.Column<int>(nullable: false)
                 },
@@ -376,17 +379,17 @@ namespace CandyShop.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9b563c6a-e824-46d2-be68-0311175efd95", "35fb1c91-a60b-4165-8d40-ae1f3f900ba3", "Admin", "ADMIN" });
+                values: new object[] { "dd0a61e2-c6c2-4bfe-905f-13ee2dadef1a", "5d358e24-8b72-443e-9419-9f7ff037f5ea", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "0793fb40-3d61-47f5-9164-4e49c9edb7c1", "1ec88e6e-325d-477b-935f-14690e24e92a", "Manager", "MGR" });
+                values: new object[] { "ffa231c6-d80d-4c23-852a-9d35e4dcc623", "b569109d-7f73-499a-bbf9-1b1bccb1be00", "Manager", "MGR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2ea666f0-d25c-4e88-aeaf-78ed4c36e8c2", "1c1304db-7a8a-417b-9067-7e9d4595edbf", "Employee", "EMP" });
+                values: new object[] { "65451205-2057-4bbe-9c2b-ac1f83ecd99d", "56566f9b-d4f2-41dc-8a15-5b70e71ab2c1", "Employee", "EMP" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_IdentityUserId",

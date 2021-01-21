@@ -1,0 +1,13 @@
+﻿@model CandyShop.Models.EmployeeWorkTrackerViewModel
+
+@{
+    ViewData["Title"] = "BeginBreak";
+}
+
+<h1>Success!</h1>
+
+<h4>Break Ended at: @Model.hoursTracker.breakStart</h4>
+
+<button type="button" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="@Model.EmployeeWorkTrackerViewModelId">Back to Time Punch</button>
+
+<a asp-action="Index">Back to List</a>

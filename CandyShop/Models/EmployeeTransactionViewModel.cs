@@ -9,6 +9,7 @@ namespace CandyShop.Models
 {
     public class EmployeeTransactionViewModel
     {
+        public int EmployeeTransactionViewModelId { get; set; }
         public int employeeId { get; set; }
         public Employee employee { get; set; }
         public int? transactionId { get; set; }

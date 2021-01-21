@@ -49,7 +49,8 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(t => t.employeeId == employee.employeeId && t.hoursTracker.clockIn == DateTime.Today).FirstOrDefault();
+            var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == employee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
+            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(t => t.employeeId == id && t.hoursTracker.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
             if (employee == null)
             {
                 return RedirectToAction("Create");
@@ -57,18 +58,24 @@ namespace CandyShop.Controllers
             if (TimePunchesForToday == null)
             {
                 TimePunchesForToday = new EmployeeWorkTrackerViewModel();
-                TimePunchesForToday.hoursTracker = new WorkHoursTracker();
+                TimePunchesForToday.employee = employee;
+                var newTracker = new WorkHoursTracker();
+                newTracker.employeeId = employee.employeeId;
+                TimePunchesForToday.hoursTracker = newTracker;
+
             }
-            return RedirectToAction("TimePunch");
+            if(TimePunchesForToday != null)
+            {
+                TimePunchesForToday.hoursTracker = tracker;
+            }
+            return View(TimePunchesForToday);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PunchIn(Employee employee)
+        public ActionResult PunchIn(EmployeeWorkTrackerViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(t => t.employeeId == employee.employeeId && t.hoursTracker.clockIn == DateTime.Today).FirstOrDefault();
+            var TimePunchesForToday = model;
 
             if (currentEmployee == null)
             {
@@ -77,70 +84,91 @@ namespace CandyShop.Controllers
             if (TimePunchesForToday == null)
             {
                 TimePunchesForToday = new EmployeeWorkTrackerViewModel();
-                TimePunchesForToday.hoursTracker = new WorkHoursTracker();
+                var newTracker = new WorkHoursTracker();
+                newTracker.employee = currentEmployee;
+                TimePunchesForToday.employee = currentEmployee;
+                TimePunchesForToday.hoursTracker = newTracker;
+                _context.WorkHoursTrackers.Add(newTracker);
                 
             }
+            if (TimePunchesForToday != null)
+            {
+                var tracker = new WorkHoursTracker();
+                TimePunchesForToday.hoursTracker = tracker;
+                TimePunchesForToday.hoursTracker.employeeId = currentEmployee.employeeId;
+                _context.WorkHoursTrackers.Add(tracker);
+
+            }
+            ;
+            TimePunchesForToday.employee = currentEmployee;            
             TimePunchesForToday.hoursTracker.clockIn = DateTime.Now;
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
-            _context.WorkHoursTrackers.Update(TimePunchesForToday.hoursTracker);
-            _context.Update(currentEmployee);
+            _context.Employee.Update(currentEmployee);
             _context.SaveChanges();
             return View(TimePunchesForToday);
+             
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PunchOut(Employee employee)
+        public ActionResult PunchOut(EmployeeWorkTrackerViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(t => t.employeeId == employee.employeeId && t.hoursTracker.clockIn == DateTime.Today).FirstOrDefault();
-
+            var TimePunchesForToday = model;
+            var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == currentEmployee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
+            tracker.employeeId = currentEmployee.employeeId;
+            TimePunchesForToday.employeeId = currentEmployee.employeeId;
+            TimePunchesForToday.trackerId = tracker.trackerId;
+            TimePunchesForToday.hoursTracker = tracker;
             if (currentEmployee == null)
             {
                 return RedirectToAction("Create");
             }
             TimePunchesForToday.hoursTracker.clockOut = DateTime.Now;
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
-            _context.WorkHoursTrackers.Update(TimePunchesForToday.hoursTracker);
-            _context.Update(currentEmployee);
+            _context.WorkHoursTrackers.Update(tracker);
+            _context.Employee.Update(currentEmployee);
             _context.SaveChanges();
             return View(TimePunchesForToday);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult BeginBreak(Employee employee)
+        public ActionResult BeginBreak(EmployeeWorkTrackerViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(t => t.employeeId == employee.employeeId && t.hoursTracker.clockIn == DateTime.Today).FirstOrDefault();
-
+            var TimePunchesForToday = model;
+            var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == currentEmployee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
+            tracker.employeeId = currentEmployee.employeeId;
+            TimePunchesForToday.employeeId = currentEmployee.employeeId;
+            TimePunchesForToday.trackerId = tracker.trackerId;
+            TimePunchesForToday.hoursTracker = tracker;
             if (currentEmployee == null)
             {
                 return RedirectToAction("Create");
             }
             TimePunchesForToday.hoursTracker.breakStart = DateTime.Now;
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
-            _context.WorkHoursTrackers.Update(TimePunchesForToday.hoursTracker);
-            _context.Update(currentEmployee);
+            _context.WorkHoursTrackers.Update(tracker);
+            _context.Employee.Update(currentEmployee);
             _context.SaveChanges();
             return View(TimePunchesForToday);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EndBreak(Employee employee)
+        public ActionResult EndBreak(EmployeeWorkTrackerViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(t => t.employeeId == employee.employeeId && t.hoursTracker.clockIn == DateTime.Today).FirstOrDefault();
-
+            var TimePunchesForToday = model;
+            var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == currentEmployee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
+            tracker.employeeId = currentEmployee.employeeId;
+            TimePunchesForToday.employeeId = currentEmployee.employeeId;
+            TimePunchesForToday.trackerId = tracker.trackerId;
+            TimePunchesForToday.hoursTracker = tracker;
             if (currentEmployee == null)
             {
                 return RedirectToAction("Create");
             }
             TimePunchesForToday.hoursTracker.breakEnd = DateTime.Now;
+            var updatedHoursTracker = TimePunchesForToday.hoursTracker;
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
-            _context.WorkHoursTrackers.Update(TimePunchesForToday.hoursTracker);
-            _context.Update(currentEmployee);
+            _context.WorkHoursTrackers.Update(tracker);
+            _context.Employee.Update(currentEmployee);
             _context.SaveChanges();
             return View(TimePunchesForToday);
         }
@@ -298,7 +326,7 @@ namespace CandyShop.Controllers
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
             var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
-            var productList = _context.TransactionProducts.Where(tp => tp.transactionId == transaction.transactionId).ToList();
+            var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
             viewModel.transaction = transaction;
             foreach(TransactionProducts tp in productList)
             {
@@ -316,45 +344,47 @@ namespace CandyShop.Controllers
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             StoreProduct product = _context.StoreProduct.Where(p => p.productId == id).SingleOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employeeId == employee.employeeId).FirstOrDefault();
-            var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+            var transaction = _context.Transaction.Where(t => t.employee == employee && t.isComplete == false).FirstOrDefault();
             if(viewModel == null)
             {
                 viewModel = new EmployeeTransactionViewModel();
                 viewModel.employee = employee;
             }
-            if(transaction != null)
+            if(transaction != null && transaction.isComplete == false)
             {
-                var transactionproducts = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
+                var transactionproducts = _context.TransactionProducts.Where(tp => tp.transactionId == transaction.transactionId).ToList();
                 foreach (TransactionProducts tp in transactionproducts)
                 {
                     var productInTransaction = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
-                    productInTransaction.QTY = 1;
                     transaction.products.Add(productInTransaction);
                     
-                }
+                }               
                 transaction.products.Add(product);
+                TransactionProducts transaction1 = new TransactionProducts();
+                transaction1.transaction = transaction;
+                transaction1.product = product;
+                _context.TransactionProducts.Update(transaction1);                         
                 viewModel.transaction = transaction;
-                _context.Transaction.Update(viewModel.transaction);
+                _context.Transaction.Update(transaction);
                 
             }
-            if(transaction == null)
+            if(transaction == null || transaction.isComplete == true)
             {
-                var newTransaction = new Transaction();                
-                newTransaction.timestamp = DateTime.Now;
-                newTransaction.isComplete = false;
-                newTransaction.products = new List<StoreProduct>();               
-                newTransaction.products.Add(product);
-                TransactionProducts transactionProducts = new TransactionProducts();
-                transactionProducts.transaction = newTransaction;
+                transaction = new Transaction();
+                transaction.timestamp = DateTime.Now;
+                transaction.isComplete = false;
+                transaction.products = new List<StoreProduct>();               
+                transaction.products.Add(product);
+                TransactionProducts transactionProducts = new TransactionProducts();                
                 transactionProducts.product = product;
-                transactionProducts.product.QTY = 1;
-                newTransaction.employee = employee;
-                newTransaction.employeeId = employee.employeeId;
-                viewModel.transaction = newTransaction;
-                _context.Transaction.Update(newTransaction);
+                transaction.employee = employee;
+                transaction.employeeId = employee.employeeId;
+                viewModel.transaction = transaction;
+                transactionProducts.transaction = transaction;
                 _context.TransactionProducts.Update(transactionProducts);
+                _context.Transaction.Add(transaction);
+                
             }
-            
             _context.Employee.Update(viewModel.employee);
             _context.EmployeeTransactionViewModels.Update(viewModel);
             _context.SaveChanges();
@@ -388,10 +418,17 @@ namespace CandyShop.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
-            viewModel.transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+            var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+            var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
+            viewModel.transaction = transaction;
+            foreach (TransactionProducts tp in productList)
+            {
+                var product = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
+                viewModel.transaction.products.Add(product);
+            }
             foreach (StoreProduct product in viewModel.transaction.products)
             {
-                viewModel.transaction.totalCost += (product.price * product.QTY);
+                viewModel.transaction.totalCost += product.price;
 
             }
             return View(viewModel);

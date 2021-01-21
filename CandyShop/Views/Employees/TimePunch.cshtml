@@ -1,12 +1,12 @@
-﻿@model CandyShop.Models.Employee
+﻿@model CandyShop.Models.EmployeeWorkTrackerViewModel
 
 @{
     ViewData["Title"] = "TimePunch";
 }
 
-<h1>TimePunch</h1>
+<h1>Time Punch</h1>
 
-<h4>Employee</h4>
+<h4>Welcome @Model.employee.name</h4>
 <table class="table">
     <thead>
         <tr>
@@ -19,18 +19,18 @@
         </thead>
     <tbody>
         <tr>
-            <td>@Html.DisplayFor(model => model.name)</td>
-            <td>@Html.DisplayFor(model => model)</td>
-            <td>@Html.DisplayFor(model => model)</td>
-            <td>@Html.DisplayFor(model => model)</td>
-            <td>@Html.DisplayFor(model => model)</td>
+            <td>@Html.DisplayFor(model => model.employee.name)</td>
+            <td>@Html.DisplayFor(model => model.hoursTracker.clockIn)</td>
+            <td>@Html.DisplayFor(model => model.hoursTracker.breakStart)</td>
+            <td>@Html.DisplayFor(model => model.hoursTracker.breakEnd)</td>
+            <td>@Html.DisplayFor(model => model.hoursTracker.clockOut)</td>
         </tr>
     </tbody>
 </table>
-<button class="btn btn-primary"><a asp-action="PunchIn" id="@Model.employeeId" asp-route-id="@Model.employeeId">Clock In</a></button>
-<button class="btn btn-primary"><a asp-action="PunchOut" id="@Model.employeeId" asp-route-id="@Model.employeeId">Clock Out</a></button>
-<button class="btn btn-success"><a asp-action="BeginBreak" id="@Model.employeeId" asp-route-id="@Model.employeeId">Start Break</a></button>
-<button class="btn btn-success"><a asp-action="EndBreak" id="@Model.employeeId" asp-route-id="@Model.employeeId">End Break</a></button>
+<button class="btn btn-outline-danger"><a asp-action="PunchIn" id="@Model" asp-route-id="@Model">Clock In</a></button>
+<button class="btn btn-outline-danger"><a asp-action="PunchOut" id="@Model" asp-route-id="@Model">Clock Out</a></button>
+<button class="btn btn-outline-success"><a asp-action="BeginBreak" id="@Model" asp-route-id="@Model">Start Break</a></button>
+<button class="btn btn-outline-success"><a asp-action="EndBreak" id="@Model" asp-route-id="@Model">End Break</a></button>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
