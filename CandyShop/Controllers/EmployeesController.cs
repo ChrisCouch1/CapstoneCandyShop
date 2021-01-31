@@ -468,5 +468,18 @@ namespace CandyShop.Controllers
             return _context.Employee.Any(e => e.employeeId == id);
             
         }
+        public ActionResult WorkHistory(int? id)
+        {
+            var hourTrackerList = _context.WorkHoursTrackers.Where(t => t.employeeId == id).OrderBy(t => t.clockIn.Date).ToList();
+            var employee = _context.Employee.Where(e => e.employeeId == id).FirstOrDefault();
+            foreach(WorkHoursTracker hoursTracker in hourTrackerList)
+            {
+                hoursTracker.employee = employee;
+                var hours = hoursTracker.clockOut.Subtract(hoursTracker.clockIn).Subtract(hoursTracker.breakEnd.Subtract(hoursTracker.breakStart)).TotalHours;
+                hoursTracker.hoursWorked = Math.Round(hours, 2);
+            }
+            return View(hourTrackerList);
+
+        }
     }
 }

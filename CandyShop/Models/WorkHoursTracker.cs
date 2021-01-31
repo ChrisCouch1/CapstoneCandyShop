@@ -19,6 +19,6 @@ namespace CandyShop.Models
         public DateTime breakEnd { get; set; }
         public DateTime clockIn { get; set; }
         public DateTime clockOut { get; set; }        
-        public int hoursWorked { get; set; } //Calculate for each work period, minus break times.
+        public double hoursWorked { get; set; } //Calculate for each work period, minus break times.
     }
 }

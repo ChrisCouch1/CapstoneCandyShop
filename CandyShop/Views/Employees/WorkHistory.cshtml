@@ -1,0 +1,57 @@
+﻿@model IEnumerable<CandyShop.Models.WorkHoursTracker>
+
+@{
+    ViewData["Title"] = "WorkHistory";
+}
+
+<h1>Work History</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Employee
+            </th>
+            <th>
+                Clocked in at:
+            </th>
+            <th>
+                Started Break at:
+            </th>
+            <th>
+                Ended Break at:
+            </th>
+            <th>
+                Clocked out at:
+            </th>
+            <th>
+                Hours Worked
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.employee.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.clockIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.breakStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.breakEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.clockOut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hoursWorked)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

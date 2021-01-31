@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CandyShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210119182519_initi")]
-    partial class initi
+    [Migration("20210131230117_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -259,8 +259,8 @@ namespace CandyShop.Migrations
                     b.Property<int>("employeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("hoursWorked")
-                        .HasColumnType("int");
+                    b.Property<double>("hoursWorked")
+                        .HasColumnType("float");
 
                     b.HasKey("trackerId");
 
@@ -298,22 +298,22 @@ namespace CandyShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dd0a61e2-c6c2-4bfe-905f-13ee2dadef1a",
-                            ConcurrencyStamp = "5d358e24-8b72-443e-9419-9f7ff037f5ea",
+                            Id = "2da92661-625b-4b90-812f-09672272c47a",
+                            ConcurrencyStamp = "79d26dec-035c-43c3-a7a2-6e17b058d620",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ffa231c6-d80d-4c23-852a-9d35e4dcc623",
-                            ConcurrencyStamp = "b569109d-7f73-499a-bbf9-1b1bccb1be00",
+                            Id = "8e6c0856-6943-4b0d-b4d7-79e7d0458723",
+                            ConcurrencyStamp = "d5cec77e-2566-41c9-bf6a-3d1069c0f40a",
                             Name = "Manager",
                             NormalizedName = "MGR"
                         },
                         new
                         {
-                            Id = "65451205-2057-4bbe-9c2b-ac1f83ecd99d",
-                            ConcurrencyStamp = "56566f9b-d4f2-41dc-8a15-5b70e71ab2c1",
+                            Id = "f74a3869-77b0-441a-abb0-78e2486aee36",
+                            ConcurrencyStamp = "f0ff93cb-396a-4d5a-95d2-6bbfbd0ef0b6",
                             Name = "Employee",
                             NormalizedName = "EMP"
                         });

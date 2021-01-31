@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CandyShop.Migrations
 {
-    public partial class initi : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -249,7 +249,7 @@ namespace CandyShop.Migrations
                     breakEnd = table.Column<DateTime>(nullable: false),
                     clockIn = table.Column<DateTime>(nullable: false),
                     clockOut = table.Column<DateTime>(nullable: false),
-                    hoursWorked = table.Column<int>(nullable: false)
+                    hoursWorked = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -379,17 +379,17 @@ namespace CandyShop.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "dd0a61e2-c6c2-4bfe-905f-13ee2dadef1a", "5d358e24-8b72-443e-9419-9f7ff037f5ea", "Admin", "ADMIN" });
+                values: new object[] { "2da92661-625b-4b90-812f-09672272c47a", "79d26dec-035c-43c3-a7a2-6e17b058d620", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ffa231c6-d80d-4c23-852a-9d35e4dcc623", "b569109d-7f73-499a-bbf9-1b1bccb1be00", "Manager", "MGR" });
+                values: new object[] { "8e6c0856-6943-4b0d-b4d7-79e7d0458723", "d5cec77e-2566-41c9-bf6a-3d1069c0f40a", "Manager", "MGR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "65451205-2057-4bbe-9c2b-ac1f83ecd99d", "56566f9b-d4f2-41dc-8a15-5b70e71ab2c1", "Employee", "EMP" });
+                values: new object[] { "f74a3869-77b0-441a-abb0-78e2486aee36", "f0ff93cb-396a-4d5a-95d2-6bbfbd0ef0b6", "Employee", "EMP" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_IdentityUserId",
