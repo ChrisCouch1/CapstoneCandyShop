@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-   //[Authorize(Roles = "Admin, Manager")]
+   //[Authorize(Roles = "Manager")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,7 +25,7 @@ namespace CandyShop.Controllers
         // GET: Managers
         public ActionResult Index()
         {
-            var productList = _context.StoreProduct.ToList();
+            var productList = _context.StoreProduct.OrderBy(p => p.category).ToList();
             
             return View(productList);
         }
@@ -69,12 +69,10 @@ namespace CandyShop.Controllers
             {
                 return NotFound();
             }
-            var viewModel = _context.EmployeeWorkTrackerViewModels.Where(vm => vm.EmployeeWorkTrackerViewModelId == id).FirstOrDefault();
-            var employee = _context.Employee.Where(e => e.employeeId == viewModel.employeeId).FirstOrDefault();
-            var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == viewModel.trackerId).FirstOrDefault();
-            viewModel.hoursTracker = hoursTracker;
-            viewModel.employee = employee;
-            return View(viewModel);
+            var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == id).FirstOrDefault();            
+            var employee = _context.Employee.Where(e => e.employeeId == hoursTracker.employeeId).FirstOrDefault();
+            hoursTracker.employee = employee;
+            return View(hoursTracker);
         }
 
         // POST: Managers/Edit/5
@@ -82,14 +80,9 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id)
+        public ActionResult Edit(int id, WorkHoursTracker hoursTracker)
         {
-            var viewModel = _context.EmployeeWorkTrackerViewModels.Where(vm => vm.EmployeeWorkTrackerViewModelId == id).FirstOrDefault();
-            var employee = _context.Employee.Where(e => e.employeeId == viewModel.employeeId).FirstOrDefault();
-            var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == viewModel.trackerId).FirstOrDefault();
-            viewModel.hoursTracker = hoursTracker;
-            viewModel.employee = employee;
-            if (id != viewModel.EmployeeWorkTrackerViewModelId)
+            if (id != hoursTracker.trackerId)
             {
                 return NotFound();
             }
@@ -98,10 +91,8 @@ namespace CandyShop.Controllers
             {
                 try
                 {
-                    _context.Update(hoursTracker);
-                    _context.Update(viewModel);
-                    _context.Update(employee);
-                    await _context.SaveChangesAsync();
+                    _context.Update(hoursTracker);                    
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -110,7 +101,7 @@ namespace CandyShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             
-            return View(viewModel);
+            return View(hoursTracker);
         }
 
         // GET: Managers/Delete/5
@@ -256,15 +247,13 @@ namespace CandyShop.Controllers
 
         public ActionResult EditList(int id)
         {
-            var viewModelList = _context.EmployeeWorkTrackerViewModels.Where(vm => vm.employeeId == id).ToList();
-            foreach(EmployeeWorkTrackerViewModel viewModel in viewModelList)
-            {
-                var employee = _context.Employee.Where(e => e.employeeId == viewModel.employeeId).FirstOrDefault();
-                viewModel.employee = employee;
-                var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == viewModel.trackerId).FirstOrDefault();
-                viewModel.hoursTracker = hoursTracker;
+            var employee = _context.Employee.Where(e => e.employeeId == id).FirstOrDefault();
+            var trackerList = _context.WorkHoursTrackers.Where(vm => vm.employeeId == id).OrderBy(vm => vm.clockIn.Date).ToList();
+            foreach(WorkHoursTracker tracker in trackerList)
+            {                
+                tracker.employee = employee;
             }
-            return View(viewModelList);
+            return View(trackerList);
         }
     }
 

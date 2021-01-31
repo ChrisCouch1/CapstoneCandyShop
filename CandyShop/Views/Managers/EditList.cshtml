@@ -1,10 +1,10 @@
-﻿@model IEnumerable<CandyShop.Models.EmployeeWorkTrackerViewModel>
+﻿@model IEnumerable<CandyShop.Models.WorkHoursTracker>
 
 @{
     ViewData["Title"] = "EditList";
 }
 
-<h1>Edit Time Punch</h1>
+<h1>Work History</h1>
 
 <h4>Select times to edit</h4>
 <table class="table">
@@ -36,19 +36,19 @@
                 @Html.DisplayFor(modelItem => item.employee.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.hoursTracker.clockIn)
+                @Html.DisplayFor(modelItem => item.clockIn)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.hoursTracker.breakStart)
+                @Html.DisplayFor(modelItem => item.breakStart)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.hoursTracker.breakEnd)
+                @Html.DisplayFor(modelItem => item.breakEnd)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.hoursTracker.clockOut)
+                @Html.DisplayFor(modelItem => item.clockOut)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="item.EmployeeWorkTrackerViewModelId">EDIT</a>
+                <a asp-action="Edit" asp-route-id="@item.trackerId">EDIT</a>
             </td>
         </tr>
         }

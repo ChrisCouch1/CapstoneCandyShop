@@ -1,38 +1,37 @@
-﻿@model CandyShop.Models.EmployeeWorkTrackerViewModel
+﻿@model CandyShop.Models.WorkHoursTracker
 
 @{
     ViewData["Title"] = "Edit";
 }
 
 <h1>Edit:</h1>
-<h4>Hours Tracker for @Model.employee.name on @Model.hoursTracker.clockIn.Date</h4>
+<h4>Time punches for @Model.employee.name on @Model.clockIn.Month/@Model.clockIn.Day/@Model.clockIn.Year</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="trackerId" />
-            <input type="hidden" asp-for="EmployeeWorkTrackerViewModelId" />
             <input type="hidden" asp-for="employeeId" />
             <div class="form-group">
-                <label asp-for="hoursTracker.clockIn" class="control-label"></label>
-                <input asp-for="hoursTracker.clockIn" class="form-control" />
-                <span asp-validation-for="hoursTracker.clockIn" class="text-danger"></span>
+                <p>Clock in time:</p>
+                <input asp-for="clockIn" class="form-control" />
+                <span asp-validation-for="clockIn" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="hoursTracker.breakStart" class="control-label"></label>
-                <input asp-for="hoursTracker.breakStart" class="form-control" />
-                <span asp-validation-for="hoursTracker.breakStart" class="text-danger"></span>
+                <p>Break start time:</p>
+                <input asp-for="breakStart" class="form-control" />
+                <span asp-validation-for="breakStart" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="hoursTracker.breakEnd" class="control-label"></label>
-                <input asp-for="hoursTracker.breakEnd" class="form-control" />
-                <span asp-validation-for="hoursTracker.breakEnd" class="text-danger"></span>
+                <p>Break end time:</p>
+                <input asp-for="breakEnd" class="form-control" />
+                <span asp-validation-for="breakEnd" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="hoursTracker.clockOut" class="control-label"></label>
-                <input asp-for="hoursTracker.clockOut" class="form-control" />
-                <span asp-validation-for="hoursTracker.clockOut" class="text-danger"></span>
+                <p>Clock out time:</p>
+                <input asp-for="clockOut" class="form-control" />
+                <span asp-validation-for="clockOut" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -42,6 +41,6 @@
 </div>
 
 <div>
-    <a asp-action="EditList">Back to List</a>
+    <a asp-action="EditList" asp-route-id="@Model.employeeId">Back to List</a>
 </div>
 

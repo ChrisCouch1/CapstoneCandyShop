@@ -1,0 +1,16 @@
+﻿@model CandyShop.Models.Transaction
+    
+@{
+    ViewData["Title"] = "CashPurchase";
+}
+
+<h1>Success!</h1>
+
+<h8>Transaction# @Model.transactionId</h8>
+    
+<p>Total items: @Model.products.Count</p>
+<p>Total cost: $@Model.totalCost</p>
+    
+<p>Today you were helped by @Model.employee.name on @DateTime.Now.Date</p>
+
+<a asp-action="Index">Back to List</a>

@@ -15,7 +15,7 @@ using CandyShop.API_Keys;
 
 namespace CandyShop.Controllers
 {
-    //[Authorize(Roles = "Admin, Manager, Employee")]
+    //[Authorize(Roles = "Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -40,7 +40,7 @@ namespace CandyShop.Controllers
                 viewModel = new EmployeeTransactionViewModel();
                 viewModel.employee = employee;
             }
-            List<StoreProduct> productList = _context.StoreProduct.ToList();
+            List<StoreProduct> productList = _context.StoreProduct.OrderBy(p => p.category).ToList();
             viewModel.listOfProducts = productList;
 
             return View(viewModel);
@@ -112,11 +112,10 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = model;
+            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(e => e.EmployeeWorkTrackerViewModelId == model.EmployeeWorkTrackerViewModelId).FirstOrDefault();
             var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == currentEmployee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
-            tracker.employeeId = currentEmployee.employeeId;
-            TimePunchesForToday.employeeId = currentEmployee.employeeId;
-            TimePunchesForToday.trackerId = tracker.trackerId;
+            tracker.employee = currentEmployee;
+            TimePunchesForToday.employee = currentEmployee;
             TimePunchesForToday.hoursTracker = tracker;
             if (currentEmployee == null)
             {
@@ -126,6 +125,7 @@ namespace CandyShop.Controllers
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
             _context.WorkHoursTrackers.Update(tracker);
             _context.Employee.Update(currentEmployee);
+            _context.Update(TimePunchesForToday);
             _context.SaveChanges();
             return View(TimePunchesForToday);
         }
@@ -133,11 +133,10 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = model;
+            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(e => e.EmployeeWorkTrackerViewModelId == model.EmployeeWorkTrackerViewModelId).FirstOrDefault();
             var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == currentEmployee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
-            tracker.employeeId = currentEmployee.employeeId;
-            TimePunchesForToday.employeeId = currentEmployee.employeeId;
-            TimePunchesForToday.trackerId = tracker.trackerId;
+            tracker.employee = currentEmployee;
+            TimePunchesForToday.employee = currentEmployee;
             TimePunchesForToday.hoursTracker = tracker;
             if (currentEmployee == null)
             {
@@ -147,6 +146,7 @@ namespace CandyShop.Controllers
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
             _context.WorkHoursTrackers.Update(tracker);
             _context.Employee.Update(currentEmployee);
+            _context.Update(TimePunchesForToday);
             _context.SaveChanges();
             return View(TimePunchesForToday);
         }
@@ -154,11 +154,10 @@ namespace CandyShop.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
-            var TimePunchesForToday = model;
+            var TimePunchesForToday = _context.EmployeeWorkTrackerViewModels.Where(e => e.EmployeeWorkTrackerViewModelId == model.EmployeeWorkTrackerViewModelId).FirstOrDefault();
             var tracker = _context.WorkHoursTrackers.Where(t => t.employeeId == currentEmployee.employeeId && t.clockIn.Day == DateTime.Today.Day).FirstOrDefault();
-            tracker.employeeId = currentEmployee.employeeId;
-            TimePunchesForToday.employeeId = currentEmployee.employeeId;
-            TimePunchesForToday.trackerId = tracker.trackerId;
+            tracker.employee = currentEmployee;
+            TimePunchesForToday.employee = currentEmployee;
             TimePunchesForToday.hoursTracker = tracker;
             if (currentEmployee == null)
             {
@@ -169,6 +168,7 @@ namespace CandyShop.Controllers
             _context.EmployeeWorkTrackerViewModels.Update(TimePunchesForToday);
             _context.WorkHoursTrackers.Update(tracker);
             _context.Employee.Update(currentEmployee);
+            _context.Update(TimePunchesForToday);
             _context.SaveChanges();
             return View(TimePunchesForToday);
         }
@@ -328,6 +328,7 @@ namespace CandyShop.Controllers
             var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
             var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
             viewModel.transaction = transaction;
+            viewModel.transaction.products = new List<StoreProduct>();
             foreach(TransactionProducts tp in productList)
             {
                 var product = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
@@ -353,6 +354,7 @@ namespace CandyShop.Controllers
             if(transaction != null && transaction.isComplete == false)
             {
                 var transactionproducts = _context.TransactionProducts.Where(tp => tp.transactionId == transaction.transactionId).ToList();
+                transaction.products = new List<StoreProduct>();
                 foreach (TransactionProducts tp in transactionproducts)
                 {
                     var productInTransaction = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
@@ -413,14 +415,17 @@ namespace CandyShop.Controllers
             return View(viewModel);
         }
 
-        public ActionResult CashPurchase()
+        public ActionResult CashPurchase(int? id, Transaction transaction)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
             var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
-            var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
-            var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
-            viewModel.transaction = transaction;
+            var currentTransaction = _context.Transaction.Where(t => t.transactionId == id && t.isComplete == false).FirstOrDefault();
+            var productList = _context.TransactionProducts.Where(tp => tp.transaction == currentTransaction).ToList();
+            currentTransaction.employee = employee;
+            viewModel.employee = employee;
+            viewModel.transaction = currentTransaction;
+            viewModel.transaction.products = new List<StoreProduct>();
             foreach (TransactionProducts tp in productList)
             {
                 var product = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
@@ -431,7 +436,10 @@ namespace CandyShop.Controllers
                 viewModel.transaction.totalCost += product.price;
                 product.QTY--;
             }
-            return View(viewModel);
+            currentTransaction.isComplete = true;
+            _context.Update(currentTransaction);
+            _context.SaveChanges();
+            return View(currentTransaction);
         }
         //public ActionResult CreditPurchase()
         //{

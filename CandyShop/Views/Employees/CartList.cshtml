@@ -3,11 +3,11 @@
     ViewData["Title"] = "CartList";
 }
 
-<h1>Your Cart</h1>
+<h4>Your Cart</h4>
 
 
     
-                @Html.DisplayNameFor(model => model.employee.name)
+Employee: @Model.employee.name
 <table class="table">
     <thead>
         <tr>
@@ -48,4 +48,17 @@
     </tbody>
 </table>
 <h2>Sub-total : $@Model.transaction.products.Sum(p => p.price)</h2>
-<span><button class="btn btn-outline-success"><a>Cash</a></button><button class="btn btn-info"><a>Credit</a></button></span>
+<div>
+    <span>
+        <button class="btn btn-outline-success">
+            <a asp-action="CashPurchase" id="@Model.transactionId" asp-route-id="@Model.transactionId">Cash</a>
+        </button>
+        <button class="btn btn-info">
+            <a asp-action="CardPurchase" id="@Model.transactionId" asp-route-id="@Model.transactionId">Credit</a>
+        </button>
+    </span>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Main Page</a>
+</div>

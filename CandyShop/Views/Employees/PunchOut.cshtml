@@ -6,7 +6,7 @@
 
 <h1>Success!</h1>
 
-<h4>Clocked Out at: @Model.hoursTracker.clockOut</h4>
+<h4>Clocked Out at: @Model.hoursTracker.clockOut.TimeOfDay</h4>
 
 
 <button type="button" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="@Model.EmployeeWorkTrackerViewModelId">Back to Time Punch</button>
