@@ -18,18 +18,6 @@
             <th>
                 Phone
             </th>
-            <th>
-                Clocked In
-            </th>
-            <th>
-                Break Start
-            </th>
-            <th>
-                Break End
-            </th>
-            <th>
-                Clocked Out
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -46,19 +34,7 @@
                 @Html.DisplayFor(modelItem => item.phoneNumber)
             </td>            
             <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>            
-            <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.employeeId">Edit Time</a>
+                <a asp-action="EditList" asp-route-id="@item.employeeId">Edit Time</a>
             </td>
         </tr>
 }

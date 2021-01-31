@@ -1,0 +1,64 @@
+﻿@model IEnumerable<CandyShop.Models.EmployeeWorkTrackerViewModel>
+
+@{
+    ViewData["Title"] = "EditList";
+}
+
+<h1>Edit Time Punch</h1>
+
+<h4>Select times to edit</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Employee
+            </th>
+            <th>
+                Clocked In
+            </th>
+            <th>
+                Break Started
+            </th>
+            <th>
+                Break Ended
+            </th>
+            <th>
+                Clocked Out
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.employee.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hoursTracker.clockIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hoursTracker.breakStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hoursTracker.breakEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hoursTracker.clockOut)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="item.EmployeeWorkTrackerViewModelId">EDIT</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="EmployeeListView">Back to Employee List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

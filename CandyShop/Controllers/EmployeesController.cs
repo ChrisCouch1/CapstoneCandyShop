@@ -413,7 +413,7 @@ namespace CandyShop.Controllers
             return View(viewModel);
         }
 
-        public ActionResult PurchaseCart()
+        public ActionResult CashPurchase()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
@@ -429,10 +429,31 @@ namespace CandyShop.Controllers
             foreach (StoreProduct product in viewModel.transaction.products)
             {
                 viewModel.transaction.totalCost += product.price;
-
+                product.QTY--;
             }
             return View(viewModel);
         }
+        //public ActionResult CreditPurchase()
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var employee = _context.Employee.Where(i => i.IdentityUserId == userId).FirstOrDefault();
+        //    var viewModel = _context.EmployeeTransactionViewModels.Where(vm => vm.employee == employee).FirstOrDefault();
+        //    var transaction = _context.Transaction.Where(t => t.employeeId == employee.employeeId && t.isComplete == false).FirstOrDefault();
+        //    var productList = _context.TransactionProducts.Where(tp => tp.transaction == transaction).ToList();
+        //    viewModel.transaction = transaction;
+        //    foreach (TransactionProducts tp in productList)
+        //    {
+        //        var product = _context.StoreProduct.Where(p => p.productId == tp.productId).FirstOrDefault();
+        //        viewModel.transaction.products.Add(product);
+        //    }
+        //    foreach (StoreProduct product in viewModel.transaction.products)
+        //    {
+        //        viewModel.transaction.totalCost += product.price;
+
+        //    }
+        //    Keys key = new Keys();
+        //    StripeConfiguration.SetApiKey(key.testKey);
+        //}
 
         private bool EmployeeExists(int id)
         {

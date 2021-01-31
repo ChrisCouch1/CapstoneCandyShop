@@ -63,20 +63,18 @@ namespace CandyShop.Controllers
         }
 
         // GET: Managers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var timeEdit = await _context.Employee.FindAsync(id);
-            if (timeEdit == null)
-            {
-                return NotFound();
-            }
-            
-            return View(timeEdit);
+            var viewModel = _context.EmployeeWorkTrackerViewModels.Where(vm => vm.EmployeeWorkTrackerViewModelId == id).FirstOrDefault();
+            var employee = _context.Employee.Where(e => e.employeeId == viewModel.employeeId).FirstOrDefault();
+            var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == viewModel.trackerId).FirstOrDefault();
+            viewModel.hoursTracker = hoursTracker;
+            viewModel.employee = employee;
+            return View(viewModel);
         }
 
         // POST: Managers/Edit/5
@@ -84,17 +82,24 @@ namespace CandyShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Employee employee)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != employee.employeeId)
+            var viewModel = _context.EmployeeWorkTrackerViewModels.Where(vm => vm.EmployeeWorkTrackerViewModelId == id).FirstOrDefault();
+            var employee = _context.Employee.Where(e => e.employeeId == viewModel.employeeId).FirstOrDefault();
+            var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == viewModel.trackerId).FirstOrDefault();
+            viewModel.hoursTracker = hoursTracker;
+            viewModel.employee = employee;
+            if (id != viewModel.EmployeeWorkTrackerViewModelId)
             {
                 return NotFound();
             }
-
+            
             if (ModelState.IsValid)
             {
                 try
                 {
+                    _context.Update(hoursTracker);
+                    _context.Update(viewModel);
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
@@ -105,7 +110,7 @@ namespace CandyShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             
-            return View(employee);
+            return View(viewModel);
         }
 
         // GET: Managers/Delete/5
@@ -247,6 +252,19 @@ namespace CandyShop.Controllers
         {
             var employeeList = _context.Employee.ToList();
             return View(employeeList);
+        }
+
+        public ActionResult EditList(int id)
+        {
+            var viewModelList = _context.EmployeeWorkTrackerViewModels.Where(vm => vm.employeeId == id).ToList();
+            foreach(EmployeeWorkTrackerViewModel viewModel in viewModelList)
+            {
+                var employee = _context.Employee.Where(e => e.employeeId == viewModel.employeeId).FirstOrDefault();
+                viewModel.employee = employee;
+                var hoursTracker = _context.WorkHoursTrackers.Where(t => t.trackerId == viewModel.trackerId).FirstOrDefault();
+                viewModel.hoursTracker = hoursTracker;
+            }
+            return View(viewModelList);
         }
     }
 
