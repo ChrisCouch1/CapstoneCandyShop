@@ -249,9 +249,11 @@ namespace CandyShop.Controllers
         {
             var employee = _context.Employee.Where(e => e.employeeId == id).FirstOrDefault();
             var trackerList = _context.WorkHoursTrackers.Where(vm => vm.employeeId == id).OrderBy(vm => vm.clockIn.Date).ToList();
-            foreach(WorkHoursTracker tracker in trackerList)
-            {                
-                tracker.employee = employee;
+            foreach (WorkHoursTracker hoursTracker in trackerList)
+            {
+                hoursTracker.employee = employee;
+                var hours = hoursTracker.clockOut.Subtract(hoursTracker.clockIn).Subtract(hoursTracker.breakEnd.Subtract(hoursTracker.breakStart)).TotalHours;
+                hoursTracker.hoursWorked = Math.Round(hours, 2);
             }
             return View(trackerList);
         }

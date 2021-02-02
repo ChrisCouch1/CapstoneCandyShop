@@ -25,6 +25,9 @@
             <th>
                 Clocked Out
             </th>
+            <th>
+                Hours Worked
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -46,6 +49,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.clockOut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hoursWorked)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.trackerId">EDIT</a>

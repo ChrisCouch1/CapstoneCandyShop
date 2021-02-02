@@ -171,5 +171,55 @@ namespace CandyShop.Controllers
         {
             return _context.Admin.Any(e => e.adminId == id);
         }
+
+        public ActionResult InventoryLevels()
+        {
+            var itemList = _context.StoreProduct.OrderBy(p => p.productName).ToList();
+            var names = new List<string>();
+            var quantities = new List<int>();
+            foreach (var item in itemList)
+            {
+                names.Add(item.productName);
+                quantities.Add(item.QTY);
+            }
+            ViewBag.NAMES = names;
+            ViewBag.QTY = quantities;
+            return View();
+        }
+
+        public ActionResult SalesByItem()
+        {
+            var itemList = _context.StoreProduct.OrderBy(p => p.productName).ToList();
+            var names = new List<string>();
+            var numberSold = new List<int>();
+            foreach(var item in itemList)
+            {
+                names.Add(item.productName);
+                var transactions = _context.TransactionProducts.Where(tp => tp.product == item).ToList();
+                numberSold.Add(transactions.Count);
+            }
+            ViewBag.NAMES = names;
+            ViewBag.SALES = numberSold;
+            return View();
+        }
+
+        public ActionResult SalesByCategory()
+        {
+            var categoryList = _context.StoreProduct.OrderBy(p => p.category).ToList();
+            var names = new List<string>();
+            var numberSold = new List<int>();
+            foreach (var item in categoryList)
+            {
+                if (!names.Contains(item.category))
+                {
+                    names.Add(item.category);
+                    var transactions = _context.TransactionProducts.Where(tp => tp.product.category == item.category).ToList();
+                    numberSold.Add(transactions.Count);
+                }  
+            }
+            ViewBag.NAMES = names;
+            ViewBag.SALES = numberSold;
+            return View();
+        }
     }
 }
