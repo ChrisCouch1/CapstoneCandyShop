@@ -4,13 +4,13 @@
     ViewData["Title"] = "TimePunch";
 }
 
-<h1>Time Punch</h1>
+<h1 style="text-align:center">Time Punch</h1>
 
-<h4>Welcome @Model.employee.name</h4>
+<h4 style="text-align:center">Welcome @Model.employee.name</h4>
 <p>View work history <a asp-action="WorkHistory" asp-route-id="@Model.employee.employeeId">here</a></p>
-<table class="table">
+<table class="table table-bordered">
     <thead>
-        <tr>
+        <tr style="background-color:lightcoral">
             <th>Employee</th>
             <th>Clock In Time</th>
             <th>Break Start</th>

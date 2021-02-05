@@ -3,19 +3,25 @@
 @{
     ViewData["Title"] = "SalesByCategory";
 }
+<style>
+    canvas#myChart {
+        width: 1000px !important;
+        height: 800px !important;
+    }
+</style>
 <p><a asp-action="Index">Back to Main Menu</a></p>
 <h2># Units Sold by Category</h2>
 <form id='your-range-form' asp-action="SalesByCategory">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <p>Starting from:</p>
-        <input asp-for="timestamp" class="form-control" />
-        <span asp-validation-for="timestamp" class="text-danger"></span>
+        <input id="fromDate" name="fromDate" asp-for="timestamp" class="form-control" />
+        <span id="fromDate" name="fromDate" asp-validation-for="timestamp" class="text-danger"></span>
     </div>
     <div class="form-group">
         <p>Ending on:</p>
-        <input asp-for="timestamp" class="form-control" />
-        <span asp-validation-for="timestamp" class="text-danger"></span>
+        <input id="toDate" name="toDate" asp-for="timestamp" class="form-control" />
+        <span id="toDate" name="toDate" asp-validation-for="timestamp" class="text-danger"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="Go!" class="btn btn-primary" />
@@ -24,7 +30,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="myChart" width="1000" height="800"></canvas>
 <script>
     var names = @Html.Raw(Json.Serialize(ViewBag.NAMES));
     var sales = @Html.Raw(Json.Serialize(ViewBag.SALES));
@@ -68,6 +74,7 @@
             }]
         },
         options: {
+            
             scales: {
                 yAxes: [{
                     ticks: {
@@ -81,8 +88,11 @@
                 }],
                 xAxes: [{
                     ticks: {
+                        autoskip: false,
                         min: 0,
-                        beginAtZero: true
+                        beginAtZero: true,
+                        maxRotation: 90,
+                        minRotation: 90
                     },
                     gridLines: {
                         display: false

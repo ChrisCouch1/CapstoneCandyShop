@@ -3,9 +3,23 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div><h1>CandyShop</h1></div>
-
-
+<style>
+    div#candycane {
+        background-image: linear-gradient(45deg, #fa1942 16.67%, #ffffff 16.67%, #ffffff 50%, #fa1942 50%, #fa1942 66.67%, #ffffff 66.67%, #ffffff 100%);
+        background-size: 63.64px 63.64px;
+    }
+    h3#cardName {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+    }
+    div#headerBox {
+        background-color: white;
+    }
+    h1#titleName {
+        text-align: center;
+    }
+</style>
+<h1 id="titleName">Welcome to the CandyShop @Model.employee.name</h1>
 
     <span>@DateTime.Today.ToString("D")</span>
     <form><button type="button" class="btn btn-success" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="@Model.employeeId"><span class="glyphicon glyphicon-time"></span> Clock In/Out</button></form>
@@ -19,16 +33,16 @@
         <div class="col-6">
             <div class="row justify-content-center m-3">
                 <div class="col-sm-8">
-                    <div class="card">
-                        <div class="card-header text-center">
-                            <h4>@Html.DisplayFor(modelItem => product.productName)</h4>
+                    <div class="card" >
+                        <div class="card-header text-center" id="candycane">
+                            <div id="headerBox"><h3 id="cardName">@Html.DisplayFor(modelItem => product.productName)</h3></div>
                         </div>
                         <div class="card-body text-md-left">
                             <h5>Category : @Html.DisplayFor(modelItem => product.category)</h5>
                             <h5># in Stock : @Html.DisplayFor(modelItem => product.QTY)</h5>
                             <h5>Price : $@Html.DisplayFor(modelItem => product.price)</h5>
                         </div>
-                        <div class="card-footer text-center">
+                        <div class="card-footer text-center" id="candycane">
                             <button><a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a></button>
                             <button><span class="glyphicon glyphicon-shopping-cart"></span><a asp-action="AddToCart" asp-route-id="@product.productId">Add to Cart</a></button>
                         </div>

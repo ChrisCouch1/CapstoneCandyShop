@@ -3,11 +3,17 @@
 @{
     ViewData["Title"] = "InventoryLevels";
 }
+<style>
+    canvas#myChart {
+        width: 1000px !important;
+        height: 600px !important;
+    }
+</style>
 <p><a asp-action="Index">Back to Main Menu</a></p>
 <h1>Inventory</h1>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="myChart" width="1000" height="600"></canvas>
 <script>
     var names = @Html.Raw(Json.Serialize(ViewBag.NAMES));
     var QTY = @Html.Raw(Json.Serialize(ViewBag.QTY));
@@ -51,6 +57,7 @@
             }]
         },
         options: {
+           
             scales: {
                 yAxes: [{
                     ticks: {
@@ -64,8 +71,11 @@
                 }],
                 xAxes: [{
                     ticks: {
+                        autoskip: false,
                         min: 0,
-                        beginAtZero: true
+                        beginAtZero: true,
+                        maxRotation: 90,
+                        minRotation: 90
                     },
                     gridLines: {
                         display: false

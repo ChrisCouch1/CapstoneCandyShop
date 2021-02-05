@@ -3,14 +3,14 @@
     ViewData["Title"] = "CartList";
 }
 
-<h4>Your Cart</h4>
+<h4 style="text-align:center">Your Cart</h4>
 
 
     
 Employee: @Model.employee.name
-<table class="table">
+<table class="table table-bordered">
     <thead>
-        <tr>
+        <tr style="background-color:lightcoral">
             <th>
                 Category
             </th>
@@ -20,8 +20,10 @@ Employee: @Model.employee.name
             <th>
                 Price
             </th>
-            <th></th>
-            <th></th>
+            <th>
+                See Details
+            </th>
+            <th>Remove Item</th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +40,7 @@ Employee: @Model.employee.name
                     @Html.DisplayFor(modelItem => product.price)
                 </td>
                 <td>
-                    <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
+                    <a asp-action="ProductDetails" asp-route-id="@product.productId">Details</a>
                 </td>
                 <td>
                     <button><a asp-action="RemoveFromCart" asp-route-id="@product.productId">Remove</a></button>
@@ -47,13 +49,13 @@ Employee: @Model.employee.name
         }
     </tbody>
 </table>
-<h2>Sub-total : $@Model.transaction.products.Sum(p => p.price)</h2>
+<h2>Sub-total : $@Model.transaction.products.Sum(p => p.price).ToString("N2")</h2>
 <div>
     <span>
         <button class="btn btn-outline-success">
             <a asp-action="CashPurchase" id="@Model.transactionId" asp-route-id="@Model.transactionId">Cash</a>
         </button>
-        <button class="btn btn-info">
+        <button class="btn btn-outline-info">
             <a asp-action="CardPurchase" id="@Model.transactionId" asp-route-id="@Model.transactionId">Credit</a>
         </button>
     </span>

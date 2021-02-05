@@ -4,11 +4,9 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Hello, Administrator</h1>
+<h1 style="text-align:center">Hello, Administrator @Model.name</h1>
 
-<p>Register: 
-    <a href="/Identity/Account/Register">New Manager/Employee</a>
-</p>
+
 <p><a asp-action="InventoryLevels">View Current Stock</a></p>
 <p><a asp-action="SalesByItem"># Units Sold by Item</a></p>
 <p><a asp-action="SalesByCategory"># Units Sold by Category</a></p>

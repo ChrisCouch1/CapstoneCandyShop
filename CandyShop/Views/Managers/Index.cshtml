@@ -4,19 +4,19 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Welcome to the Candy Shop</h1>
+<h1>Welcome to the CandyShop</h1>
 
 <p>
     <ul>
-        <li><button onclick="location.href='@Url.Action("createproduct", "managers")'">Add New Product To Inventory</button></li>
-        <li><button onclick="location.href='@Url.Action("employeelistview", "managers")'">View Employee Work History</button></li>
+        <li><button type="button" class="btn btn-success" onclick="location.href='@Url.Action("createproduct", "managers")'">Add New Product</button></li>
+        <li><button type="button" class="btn btn-info" onclick="location.href='@Url.Action("employeelistview", "managers")'">Work History</button></li>
     </ul>
 
 </p>
 <h4><span>Current Inventory</span></h4>
-<table class="table">
+<table class="table table-bordered">
     <thead>
-        <tr>
+        <tr style="background-color:lightcoral">
             <th>
                 Category
             </th>
