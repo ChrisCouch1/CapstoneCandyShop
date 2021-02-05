@@ -4,9 +4,9 @@
     ViewData["Title"] = "EditProduct";
 }
 
-<h1>EditProduct</h1>
+<h1>Edit Product</h1>
 
-<h4>Product</h4>
+<h4>Product to edit: @Model.productName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,32 +14,32 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="productId" />
             <div class="form-group">
-                <label asp-for="category" class="control-label"></label>
+                <p>Edit Category</p>
                 <input asp-for="category" class="form-control" />
                 <span asp-validation-for="category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="productName" class="control-label"></label>
+                <p>Edit Name</p>
                 <input asp-for="productName" class="form-control" />
                 <span asp-validation-for="productName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="description" class="control-label"></label>
+                <p>Edit Description</p>
                 <input asp-for="description" class="form-control" />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QTY" class="control-label"></label>
+                <p>Edit Quantity in Stock</p>
                 <input asp-for="QTY" class="form-control" />
                 <span asp-validation-for="QTY" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="price" class="control-label"></label>
+                <p>Edit Price</p>
                 <input asp-for="price" class="form-control" />
                 <span asp-validation-for="price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="supplierDetails" class="control-label"></label>
+                <p>Edit Supplier Details</p>
                 <input asp-for="supplierDetails" class="form-control" />
                 <span asp-validation-for="supplierDetails" class="text-danger"></span>
             </div>

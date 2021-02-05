@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-   //[Authorize(Roles = "Manager")]
+   [Authorize(Roles = "Admin")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -179,7 +179,7 @@ namespace CandyShop.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(EditProduct));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(product);
@@ -217,9 +217,7 @@ namespace CandyShop.Controllers
                 return NotFound();
             }
 
-            var product = await _context.StoreProduct
-                .Include(p => p.productId)
-                .FirstOrDefaultAsync(p => p.productId == id);
+            var product = await _context.StoreProduct.Where(p => p.productId == id).FirstOrDefaultAsync(p => p.productId == id);
             if (product == null)
             {
                 return NotFound();

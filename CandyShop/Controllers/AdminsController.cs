@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CandyShop.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -187,35 +187,64 @@ namespace CandyShop.Controllers
             return View();
         }
 
-        public ActionResult SalesByItem()
+        public ActionResult SalesByItem(DateTime? fromDate, DateTime? toDate)
         {
             var itemList = _context.StoreProduct.OrderBy(p => p.productName).ToList();
             var names = new List<string>();
             var numberSold = new List<int>();
-            foreach(var item in itemList)
+            if(fromDate != null && toDate != null)
             {
-                names.Add(item.productName);
-                var transactions = _context.TransactionProducts.Where(tp => tp.product == item).ToList();
-                numberSold.Add(transactions.Count);
+                foreach (var item in itemList)
+                {
+                    names.Add(item.productName);
+                    var transactions = _context.TransactionProducts.Where(tp => tp.product == item && tp.transaction.timestamp <= toDate && tp.transaction.timestamp >= fromDate).ToList();
+                    numberSold.Add(transactions.Count);
+                }
             }
+            else
+            {
+                foreach(var item in itemList)
+                {
+                    names.Add(item.productName);
+                    var transactions = _context.TransactionProducts.Where(tp => tp.product == item).ToList();
+                    numberSold.Add(transactions.Count);
+                }
+            }
+            
             ViewBag.NAMES = names;
             ViewBag.SALES = numberSold;
             return View();
         }
 
-        public ActionResult SalesByCategory()
+        public ActionResult SalesByCategory(DateTime? fromDate, DateTime? toDate)
         {
             var categoryList = _context.StoreProduct.OrderBy(p => p.category).ToList();
             var names = new List<string>();
             var numberSold = new List<int>();
-            foreach (var item in categoryList)
+            if (fromDate != null && toDate != null)
             {
-                if (!names.Contains(item.category))
+                foreach (var item in categoryList)
                 {
-                    names.Add(item.category);
-                    var transactions = _context.TransactionProducts.Where(tp => tp.product.category == item.category).ToList();
-                    numberSold.Add(transactions.Count);
-                }  
+                    if (!names.Contains(item.category))
+                    {
+                        names.Add(item.category);
+                        var transactions = _context.TransactionProducts.Where(tp => tp.product.category == item.category && tp.transaction.timestamp <= toDate && tp.transaction.timestamp >= fromDate).ToList();
+                        numberSold.Add(transactions.Count);
+                    }
+                }
+            }
+
+            else
+            {
+                foreach (var item in categoryList)
+                {
+                    if (!names.Contains(item.category))
+                    {
+                        names.Add(item.category);
+                        var transactions = _context.TransactionProducts.Where(tp => tp.product.category == item.category).ToList();
+                        numberSold.Add(transactions.Count);
+                    }
+                }
             }
             ViewBag.NAMES = names;
             ViewBag.SALES = numberSold;

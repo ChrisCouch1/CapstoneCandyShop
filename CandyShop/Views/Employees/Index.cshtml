@@ -3,55 +3,39 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div><h1>CandyShop</h1></div>
 
-<h1>Welcome to the Candy Shop</h1>
 
 
-    <span>@DateTime.Now</span>
-    <form><button type="button" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="@Model.employeeId">Clock In/Out</button></form>
-<div style="float:right"><span><button onclick="location.href='@Url.Action("cartlist", "employees")'" >View Cart</button></span></div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Category
-            </th>
-            <th>
-                Product Name
-            </th>
-            <th>
-                Quantity
-            </th>
-            <th>
-                Price
-            </th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+    <span>@DateTime.Today.ToString("D")</span>
+    <form><button type="button" class="btn btn-success" onclick="location.href='@Url.Action("timepunch", "employees")'" asp-action-id="@Model.employeeId"><span class="glyphicon glyphicon-time"></span> Clock In/Out</button></form>
+<div style="float:right"><button type="button" class="btn btn-info" onclick="location.href='@Url.Action("cartlist", "employees")'" ><span class="glyphicon glyphicon-shopping-cart"></span> View Cart</button></div>
+
+<div class="container">
+    <div class="row" > 
+
         @foreach (var product in Model.listOfProducts)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => product.category)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => product.productName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => product.QTY)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => product.price)
-                </td>
-                <td>
-                    <a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a>
-                </td>
-                <td>
-                    <button><a asp-action="AddToCart" asp-route-id="@product.productId">Add to Cart</a></button>
-                </td>
-            </tr>
+        <div class="col-6">
+            <div class="row justify-content-center m-3">
+                <div class="col-sm-8">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>@Html.DisplayFor(modelItem => product.productName)</h4>
+                        </div>
+                        <div class="card-body text-md-left">
+                            <h5>Category : @Html.DisplayFor(modelItem => product.category)</h5>
+                            <h5># in Stock : @Html.DisplayFor(modelItem => product.QTY)</h5>
+                            <h5>Price : $@Html.DisplayFor(modelItem => product.price)</h5>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button><a asp-action="ProductDetails" asp-route-id="@product.productId">Product Details</a></button>
+                            <button><span class="glyphicon glyphicon-shopping-cart"></span><a asp-action="AddToCart" asp-route-id="@product.productId">Add to Cart</a></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

@@ -4,41 +4,41 @@
     ViewData["Title"] = "CreateProduct";
 }
 
-<h1>CreateProduct</h1>
+<h1>Add to Inventory</h1>
 
-<h4>Product</h4>
+<h4>New Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="category" class="control-label"></label>
+                <p>Category</p>
                 <input asp-for="category" class="form-control" />
                 <span asp-validation-for="category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="productName" class="control-label"></label>
+                <p>Name of Product</p>
                 <input asp-for="productName" class="form-control" />
                 <span asp-validation-for="productName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="description" class="control-label"></label>
+                <p>Brief Description</p>
                 <input type="text" size="150" asp-for="description" class="form-control" />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QTY" class="control-label"></label>
+                <p>Quantity in Stock</p>
                 <input asp-for="QTY" class="form-control" />
                 <span asp-validation-for="QTY" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="price" class="control-label"></label>
+                <p>Price</p>
                 <input asp-for="price" class="form-control" />
                 <span asp-validation-for="price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="supplierDetails" class="control-label"></label>
+                <p>Details about the supplier:</p>
                 <input type="text" size="150" asp-for="supplierDetails" class="form-control" />
                 <span asp-validation-for="supplierDetails" class="text-danger"></span>
             </div>
